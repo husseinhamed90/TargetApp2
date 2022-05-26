@@ -1,6 +1,7 @@
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-//import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,11 +46,11 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: translation(),
-      // theme: ThemeData(
-      //   textTheme: GoogleFonts.tajawalTextTheme(
-      //     Theme.of(context).textTheme,
-      //   ),
-      // ),
+      theme: ThemeData(
+        textTheme: GoogleFonts.tajawalTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
       home: SplachScreen(),
 
       localizationsDelegates: translator.delegates,
