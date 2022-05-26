@@ -1,0 +1,4 @@
+enum  dayofoption{
+  friday,
+  saturday
+}
