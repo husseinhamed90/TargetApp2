@@ -77,7 +77,7 @@ class _remainingdaysState extends State<remainingdays> {
                     //child: Image.asset("images/target.jpg",height: MediaQuery.of(context).size.height/3,),
                   ),
                   Container(
-                    height: constraints.maxHeight * 0.2,
+                    //height: constraints.maxHeight * 0.2,
                     child: Column(
                       children: [
                         InkWell(

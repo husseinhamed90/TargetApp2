@@ -15,7 +15,7 @@ snack(String content) {
             topRight: Radius.circular(15.0),
           )));
 }
-item(String title, String subtitle,bool iscouponapplied,Collection currentcollection) {
+Widget item(String title, String subtitle,bool iscouponapplied,Collection currentcollection) {
   if(title=="Collection Fee : "){
     return ListTile(
       title: AutoSizeText(
@@ -78,14 +78,15 @@ item(String title, String subtitle,bool iscouponapplied,Collection currentcollec
   }
 
 }
-Widget field(String label, IconData icon, TextInputType type, TextEditingController controller, Key key,double width,appProvider appProviderInstance) {
+Widget buildField(String label, IconData icon, TextInputType type, TextEditingController controller, Key key,double width,appProvider appProviderInstance) {
+
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
       width: width,
       child: ValueListenableBuilder(
-        valueListenable: appProviderInstance.pressed,
-        builder: (context, value, child) => TextFormField(
+        valueListenable: label == 'Password'.tr? appProviderInstance.pressed:appProviderInstance.OnConfirmpressed,
+        builder: (context, valuee, child) => TextFormField(
           key: key,
           validator: (value) {
             return appProviderInstance.validateForm(label, value);
@@ -110,23 +111,74 @@ Widget field(String label, IconData icon, TextInputType type, TextEditingControl
             labelText: label,
             labelStyle: TextStyle(color: Colors.grey),
             prefixIcon: Icon(icon, color: Colors.grey),
-            suffixIcon: label == 'Password'.tr
+            suffixIcon: label == 'Password'.tr||label=='Confirm Password'.tr
                 ? IconButton(
-                  icon:!value ?Icon(Icons.remove_red_eye):Icon(Icons.visibility_off),
+                  icon:!valuee ?Icon(Icons.remove_red_eye):Icon(Icons.visibility_off),
                   color: Colors.grey,
                   iconSize: 20.0,
                   onPressed: () {
-                    appProviderInstance.changeStateOfpressed();
+                    if(label == 'Password'.tr)
+                       appProviderInstance.changeStateOfEyeIcon(appProviderInstance.pressed);
+                    else if(label=='Confirm Password'.tr)
+                      appProviderInstance.changeStateOfEyeIcon(appProviderInstance.OnConfirmpressed);
                   },
                 )
                 : null,
           ),
           textInputAction: TextInputAction.done,
           keyboardType: type,
-          obscureText: (label=="Password".tr)?value:false,
+          obscureText: (label=="Password".tr||label=='Confirm Password'.tr)?valuee:false,
           controller: controller,
         ),
       ),
     ),
+  );
+}
+
+Widget loginField(String label, IconData icon, bool secured, TextInputType type, TextEditingController controller, Key key,appProvider appProviderInstance) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+
+    child: ValueListenableBuilder(
+      valueListenable: appProviderInstance.isPassVisibleLoginPage,
+      builder: (context, value, child) =>   TextFormField(
+         key: key,
+         validator: (value){
+           if(value.isEmpty){
+             return 'required'.tr;
+           }
+           else{
+             return null;
+           }
+         },
+         decoration: InputDecoration(
+             border: OutlineInputBorder(
+                 borderRadius: BorderRadius.circular(15.0),
+                 borderSide: BorderSide(color: Colors.black, width: 0.5)
+             ),
+             focusedBorder: OutlineInputBorder(
+                 borderRadius: BorderRadius.circular(15.0),
+                 borderSide: BorderSide(color: Colors.black, width: 0.5)
+             ),
+             enabledBorder: OutlineInputBorder(
+                 borderRadius: BorderRadius.circular(15.0),
+                 borderSide: BorderSide(color: Colors.black, width: 0.5)
+             ),
+             prefixIcon: Icon(icon, color: Colors.black),
+             suffixIcon: label == 'Password'.tr ? IconButton(
+               icon:!secured ?Icon(Icons.remove_red_eye):Icon(Icons.visibility_off),
+               color: Colors.grey,
+               onPressed: () {
+                 appProviderInstance.changeStateOfEyeIcon(appProviderInstance.isPassVisibleLoginPage);
+               },
+             ) : null,
+             labelText: label
+         ),
+         textInputAction: TextInputAction.done,
+         keyboardType: type,
+         obscureText: (label =="Password".tr)?value:false,
+         controller: controller
+     ),
+    )
   );
 }

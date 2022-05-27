@@ -24,7 +24,6 @@ class appProvider extends ChangeNotifier{
   String language="";
   Subscription subscription;
   List<days>daysoptions;
-  //days d=days(1,14,[dayofoption.saturday,dayofoption.saturday]) ;
   DateTime startdate;
   DateTime enddate ;
   Collection currentcollection;
@@ -39,9 +38,9 @@ class appProvider extends ChangeNotifier{
     notifyListeners();
 
   }
-  Map<int,String> dayData =
-      {1 : "Mon",2 : "Tue", 3 : "Wed", 4 : "Thur", 5 : "Fri", 6 : "Sat", 7 : "Sun" };
-  void updatecCollection(Collection collection){
+  Map<int,String> dayData = {1 : "Mon",2 : "Tue", 3 : "Wed", 4 : "Thur", 5 : "Fri", 6 : "Sat", 7 : "Sun" };
+
+  void updateCollection(Collection collection){
     currentcollection=collection;
     startdate=DateTime.now().add(new Duration(days:2));
     enddate=DateTime.now().add(new Duration(days:daysoptions[currentcollection.days_id].numodfays+1));
@@ -82,16 +81,17 @@ class appProvider extends ChangeNotifier{
   Map<DateTime, Map<String,List<meal>>> mealsmap = {};
   List<dynamic> selectedEvents=[];
   List<city>cities=[];
-  var user;
-  List<int>numbers=[];
-
+  User user;
   ValueNotifier<String> userAddressName=ValueNotifier("");
-  ValueNotifier<bool> pressed=ValueNotifier(false);
-  void changeStateOfpressed(){
-    pressed.value=!pressed.value;
+  ValueNotifier<bool> pressed=ValueNotifier(true);
+  ValueNotifier<bool> OnConfirmpressed=ValueNotifier(true);
+  ValueNotifier<bool> isPassVisibleLoginPage=ValueNotifier(true);
+  void changeStateOfEyeIcon(ValueNotifier<bool> value){
+    value.value=!value.value;
     notifyListeners();
   }
-  void updateuser(){
+
+  void updateUser(){
     user = User(
         name.text,
         mobile.text,
@@ -102,20 +102,11 @@ class appProvider extends ChangeNotifier{
         confirmpassword.text,
         selectedCity,
         selectedArea,
-        (block.text == "")
-            ? ""
-            :block.text,
-        (Floor.text == "")
-            ? ""
-            : Floor.text,
-        (Appointmnet.text == "")
-            ? ""
-            : Appointmnet.text,
-        (building.text == "")
-            ? ""
-            : building.text,
-        street.text);
-
+        (block.text == "") ? "" :block.text,
+        (Floor.text == "") ? "" : Floor.text,
+        (Appointmnet.text == "") ? "" : Appointmnet.text,
+        (building.text == "") ? "" : building.text,
+         street.text);
     notifyListeners();
   }
   String validateForm(String label,String value){
@@ -166,6 +157,9 @@ class appProvider extends ChangeNotifier{
     userAddressName.value=address;
     notifyListeners();
   }
+  void updateUserStreet(){
+    user.Street=userAddressName.value;
+  }
   List<meal>breakfastmeals=[];
   List<meal>snacks=[];
   List<meal>dinnermeals=[];
@@ -175,17 +169,34 @@ class appProvider extends ChangeNotifier{
   List<meal>choosendinnermeals=[];
   List<meal>chossenlaunchmeals=[];
   List<meal>chossensnacks=[];
-
   List<meal>allchoosenbreakfastmeals=[];
   List<meal>allchoosendinnermeals=[];
   List<meal>allchossenlaunchmeals=[];
   List<meal>allchossensnacks=[];
-
   List<String>Choosenprograms=[];
 
-  void resetuser(){
+  void resetUser(){
     user=null;
     notifyListeners();
+  }
+
+  void resetTextFields(){
+      name.clear();
+      mobile.clear();
+      email.clear();
+      birthdate.clear();
+      password.clear();
+      confirmpassword.clear();
+      day.clear();
+      month.clear();
+      year.clear();
+      block.clear();
+      street.clear();
+      building.clear();
+      Floor.clear();
+      Appointmnet.clear();
+      setUserAddressName("");
+      notifyListeners();
   }
   String getDays(appProvider approvider){
     String days ="";
@@ -196,6 +207,7 @@ class appProvider extends ChangeNotifier{
     return days;
 
   }
+
   void getmeals(){
     //get meals and collections from the api
     daysoptions=[
@@ -237,30 +249,31 @@ class appProvider extends ChangeNotifier{
     ];
     //notifyListeners();
   }
+
   bool validateusernameandpassword(String mobileNumber ,String password){
     //get user information from api
     user = User(
-        "User 1",
+        "Hussein Hamed",
          mobileNumber,
-        "User1@gmail.com",
+        "hussei hamed@gmail.com",
         DateTime.now(),
-
         "male",
         password,
         password,
-        "Kuwait",
-        "Hawally",
+        "Giza",
+        "Haram",
         "2",
         "2",
         "2",
         "2",
-        "street");
-    print(daysoptions[2].dayoff);
-    updatecCollection( Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[2], 1),);
-    notifyListeners();
+        "El HARAM Street");
+     setUserAddressName(user.Street);
+     updateCollection( Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[2], 1),);
+     notifyListeners();
     //get user info from the server
-    return true;
+     return true;
   }
+
   int daysaftersubscription;
   void updateremain(int x){
     daysaftersubscription=x;
@@ -268,16 +281,14 @@ class appProvider extends ChangeNotifier{
   }
 
   void removefrommeals(meal meal,List<meal>list,DateTime dateTime,String x){
+
     for(int i=0;i<list.length;i++){
       if(list[i].id==meal.id){
         list.removeAt(i);
         break;
       }
     }
-
-
     if(x=="BreakFast".tr){
-      //allchoosenbreakfastmeals.add(newmea);
       for(int i=0;i<allchoosenbreakfastmeals.length;i++){
         if(allchoosenbreakfastmeals[i].id==meal.id&&allchoosenbreakfastmeals[i].mealdate==dateTime){
           allchoosenbreakfastmeals.removeAt(i);
@@ -302,11 +313,9 @@ class appProvider extends ChangeNotifier{
           break;
         }
       }
-
       notifyListeners();
     }
     else if(x=="Snacks".tr){
-
       for(int i=0;i<allchossensnacks.length;i++){
         if(allchossensnacks[i].id==meal.id&&allchossensnacks[i].mealdate==dateTime){
           allchossensnacks.removeAt(i);
@@ -317,11 +326,13 @@ class appProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
+
   bool iscouponvalid(String coupon){
     if(coupon=="50A"){
       return true;
     }
   }
+
   bool ismealexist(meal newmeal,List<meal>list){
     for(int i=0;i<list.length;i++){
       if(list[i].id==newmeal.id){
@@ -330,6 +341,7 @@ class appProvider extends ChangeNotifier{
     }
     return false;
   }
+
   void chnagecurrentprogram(String x){
     if(x=="BreakFast".tr){
       meals=breakfastmeals;
@@ -344,6 +356,7 @@ class appProvider extends ChangeNotifier{
       meals=snacks;
     }
   }
+
   void removeprogram (String programename){
     for(int i=0;i<Choosenprograms.length;i++){
       if(Choosenprograms[i]==programename){
@@ -353,7 +366,7 @@ class appProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-  Map<String,List<meal>>chosenMeals={};
+
   void resetmeals(){
     chossenlaunchmeals=[];
     choosendinnermeals=[];
@@ -365,6 +378,7 @@ class appProvider extends ChangeNotifier{
     chossensnacks=[];
     notifyListeners();
   }
+
   void addtolist(meal newmeal,String x,DateTime dateTime){
     meal newmea=meal.withdate(newmeal.id,newmeal.name,newmeal.description,newmeal.mealcategory,
         newmeal.url,dateTime);
@@ -381,7 +395,6 @@ class appProvider extends ChangeNotifier{
     else if(x=="Launch".tr){
       allchossenlaunchmeals.add(newmea);
       chossenlaunchmeals.add(newmeal);
-      chosenMeals["launch"]=allchossenlaunchmeals;
       notifyListeners();
     }
     else if(x=="Snacks".tr){
@@ -396,6 +409,7 @@ class appProvider extends ChangeNotifier{
     language = (prefs.getString('Lang') ?? "Eng");
     notifyListeners();
   }
+
   void setlanguagetopref(String lang)async{
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
@@ -409,7 +423,8 @@ class appProvider extends ChangeNotifier{
      return (prefs.getInt('remain') ?? 0);
     notifyListeners();
   }
-  void setremaintopref(String lang)async{
+
+  void setremaintopref()async{
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
     await prefs.setInt("remain", daysaftersubscription);
@@ -419,9 +434,10 @@ class appProvider extends ChangeNotifier{
   void setstartdate(String date)async{
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
-    await prefs.setString("startdate", startdate.toString());
+    await prefs.setString("startdate", date);
     notifyListeners();
   }
+
   void getstartdate()async{
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;

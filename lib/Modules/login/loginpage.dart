@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:target/Modules/RemainingDays/remainingdays.dart';
 import 'package:target/providers/AppProvider.dart';
+import 'package:target/shared/components.dart';
 
 import '../profile/profile.dart';
 class loginpage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _loginpageState extends State<loginpage> {
 
   @override
   Widget build(BuildContext context) {
-    appProvider x = Provider.of<appProvider>(context);
+    appProvider appProviderInstance = Provider.of<appProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -63,12 +64,11 @@ class _loginpageState extends State<loginpage> {
                         children: [
                           Container(
                             alignment: Alignment.center,
-
                             width: MediaQuery.of(context).size.width - 70,
                             child: Column(
                               children: [
-                                field('Mobile'.tr, Icons.phone, false, TextInputType.number, numberController, numberKey),
-                                field('Password'.tr, Icons.lock, secure, TextInputType.text, passwordController, passwordKey),
+                                loginField('Mobile'.tr, Icons.phone, false, TextInputType.number, numberController, numberKey,appProviderInstance),
+                                loginField('Password'.tr, Icons.lock, secure, TextInputType.text, passwordController, passwordKey,appProviderInstance),
                               ],
                             ),
                           ),
@@ -76,14 +76,14 @@ class _loginpageState extends State<loginpage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          x.getmeals();
+                          appProviderInstance.getmeals();
                           if(_formKey.currentState.validate()){
-                            if(x.validateusernameandpassword(numberController.text,passwordController.text)){
-                              if(x.currentcollection!=null && x.startdate!=null && x.enddate!=null){
-                                x.startdate=DateTime.now().add(new Duration(days:2));
-                                x.enddate=DateTime.now().add(new Duration(days:x.currentcollection.dayss.numodfays+1));
-                                print(x.startdate);
-                                print(x.enddate);
+                            if(appProviderInstance.validateusernameandpassword(numberController.text,passwordController.text)){
+                              if(appProviderInstance.currentcollection!=null && appProviderInstance.startdate!=null && appProviderInstance.enddate!=null){
+                                appProviderInstance.startdate=DateTime.now().add(new Duration(days:2));
+                                appProviderInstance.enddate=DateTime.now().add(new Duration(days:appProviderInstance.currentcollection.dayss.numodfays+1));
+                                print(appProviderInstance.startdate);
+                                print(appProviderInstance.enddate);
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => remainingdays(),));
                               }
                             }
@@ -108,50 +108,6 @@ class _loginpageState extends State<loginpage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-  field(String label, IconData icon, bool secured, TextInputType type, TextEditingController controller, Key key) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-          key: key,
-          validator: (value){
-            if(value.isEmpty){
-              return 'required'.tr;
-            }else{
-              return null;
-            }
-          },
-          decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Colors.black, width: 0.5)
-              ),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Colors.black, width: 0.5)
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: BorderSide(color: Colors.black, width: 0.5)
-              ),
-              prefixIcon: Icon(icon, color: Colors.black),
-              suffixIcon: label == 'Password'.tr ? IconButton(
-                icon:!secure ?Icon(Icons.remove_red_eye):Icon(Icons.visibility_off),
-                color: Colors.grey,
-                onPressed: () {
-                  setState((){
-                    secure = !secure;
-                  });
-                },
-              ) : null,
-              labelText: label
-          ),
-          textInputAction: TextInputAction.done,
-          keyboardType: type,
-          obscureText: secured,
-          controller: controller
       ),
     );
   }

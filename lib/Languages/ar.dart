@@ -71,7 +71,7 @@ const Map<String ,String>ar={
   "Edit Profile":"تعديل الملف الشخصي",
   "Edit Package":"تعديل الحزمة",
   "Sign in":"تسجيل دخول",
-  "Subscription":"اشتراك جديد",
+  "New Subscription":"اشتراك جديد",
   "See Collections":"التجميعات المتاحة",
   "Collections...":"التجميعات",
   "Collection Details":"تفاصيل التجميعة",

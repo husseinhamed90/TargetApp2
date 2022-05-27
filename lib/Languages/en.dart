@@ -72,7 +72,7 @@ const Map<String ,String>en={
   "BirthDate: ":"BirthDate: ",
   "Apply":"Apply",
   "Password not Matching":"Password not Matching",
-  "Subscription":"Subscription",
+  "New Subscription":"New Subscription",
   "Sign in":"Sign in",
   "See Collections":"See Collections",
   "Collections...":"Collections...",

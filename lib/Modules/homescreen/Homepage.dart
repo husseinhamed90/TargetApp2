@@ -20,8 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String lang="";
   @override
   Widget build(BuildContext context) {
-    final x =Provider.of<appProvider>(context);
-    isSwitched= (x.language=='Ar')?true:!false;
+    final appProviderInstance =Provider.of<appProvider>(context);
+    isSwitched= (appProviderInstance.language=='Ar')?true:!false;
 
     return Scaffold(
 
@@ -57,8 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    getcurrentlocation();
-                    x.getmeals();
+                    appProviderInstance.getmeals();
+                    appProviderInstance.resetUser();
+                    print(appProviderInstance.user);
                     Navigator.push(context, MaterialPageRoute(builder: (_) {return Packages();}));
                   },
                   child: Container(
@@ -71,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     child: Center(
                       child: AutoSizeText(
-                        "Subscription".tr,
-                        style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+                        "New Subscription".tr,
+                        style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    x.getmeals();
+                    appProviderInstance.getmeals();
                     Navigator.push(context, MaterialPageRoute(builder: (_) {return loginpage();}));
                   },
                   child: Container(
@@ -98,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Center(
                       child: AutoSizeText(
                         "Sign in".tr,
-                        style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),

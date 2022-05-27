@@ -218,9 +218,11 @@ class _DetailsState extends State<programdetails> {
                             if(widget.currentcollection.snacks){
                               appProviderInstance.snackscheckedValue=true;
                             }
-                            appProviderInstance.updatecCollection(widget.currentcollection);
+                            appProviderInstance.updateCollection(widget.currentcollection);
                             appProviderInstance.startdate=DateTime.now().add(new Duration(days:2));
                             appProviderInstance.enddate=DateTime.now().add(new Duration(days:appProviderInstance.currentcollection.dayss.numodfays+1));
+                            print("sssssssssssssssss");
+                            print(appProviderInstance.user);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount()));
                           },
                           child: Container(

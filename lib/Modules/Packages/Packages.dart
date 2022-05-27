@@ -12,15 +12,15 @@ class Packages extends StatefulWidget {
 }
 
 class _PackagesState extends State<Packages> {
-  Collection c;
-  program p;
+  Collection currentCollection;
+  appProvider appProviderInstance;
+  program currentProgram;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    final x =Provider.of<appProvider>(context,listen: false);
-    c=x.currentcollection;
-    p=x.cuurentprogram;
+    appProviderInstance =Provider.of<appProvider>(context,listen: false);
+    currentCollection=appProviderInstance.currentcollection;
+    currentProgram=appProviderInstance.cuurentprogram;
   }
   TextStyle textStyle =TextStyle(
       color: Colors.grey,
@@ -29,7 +29,6 @@ class _PackagesState extends State<Packages> {
   );
   @override
   Widget build(BuildContext context) {
-    final x =Provider.of<appProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation:0,
@@ -40,7 +39,6 @@ class _PackagesState extends State<Packages> {
         ),
       ),
       body: LayoutBuilder(
-
         builder: (context, constraints) =>Container(
           height: constraints.maxHeight,
           child: OrientationBuilder(
@@ -48,7 +46,6 @@ class _PackagesState extends State<Packages> {
               children: [
                 Container(
                   margin: EdgeInsets.fromLTRB(10,10,10,10),
-
                   height:(orientation==Orientation.portrait)? (MediaQuery.of(context).size.height)*0.31:(MediaQuery.of(context).size.height)*0.36,
                   child: ListView.builder(
                     itemBuilder:(context, index) {
@@ -59,7 +56,7 @@ class _PackagesState extends State<Packages> {
                             width: MediaQuery.of(context).size.width/1.5,
                             decoration: BoxDecoration(
                               // color: Colors.white,
-                              color: (p!=null)?(p.name==x.programss[index].name)?Colors.black12:Colors.white:Colors.white,
+                              color: (currentProgram!=null)?(currentProgram.name==appProviderInstance.programss[index].name)?Colors.black12:Colors.white:Colors.white,
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                             child: Column(
@@ -69,17 +66,15 @@ class _PackagesState extends State<Packages> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.0),
                                     image: DecorationImage(
-                                        image: NetworkImage(x.programss[index].url),
+                                        image: NetworkImage(appProviderInstance.programss[index].url),
                                         fit : BoxFit.fitWidth
                                     ),
                                   ),
                                 ),
                                 Container(
-
                                   child: ListTile(
-
                                     title: Text(
-                                      x.programss[index].name,
+                                      appProviderInstance.programss[index].name,
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: (MediaQuery.of(context).size.height)*0.025,
@@ -97,9 +92,9 @@ class _PackagesState extends State<Packages> {
                                     trailing: Icon(Icons.arrow_downward, color: Color(0xff36a9e0), size: (MediaQuery.of(context).size.height)*0.03),
                                     onTap: () {
                                       setState(() {
-                                        p=x.programss[index];
-                                        x.cuurentprogram=x.programss[index];
-                                        x.choosedprogram=x.programss[index].name;
+                                        currentProgram=appProviderInstance.programss[index];
+                                        appProviderInstance.cuurentprogram=appProviderInstance.programss[index];
+                                        appProviderInstance.choosedprogram=appProviderInstance.programss[index].name;
                                       });
                                     },
                                   ),
@@ -111,18 +106,16 @@ class _PackagesState extends State<Packages> {
                           ),
                           onTap: () {
                             setState(() {
-                              p=x.programss[index];
-                              x.cuurentprogram=x.programss[index];
-                              x.choosedprogram=x.programss[index].name;
-
+                              currentProgram=appProviderInstance.programss[index];
+                              appProviderInstance.cuurentprogram=appProviderInstance.programss[index];
+                              appProviderInstance.choosedprogram=appProviderInstance.programss[index].name;
                             });
-
                           },
                         ),
                       );
                     },
                     scrollDirection: Axis.horizontal,
-                    itemCount: x.programss.length,
+                    itemCount: appProviderInstance.programss.length,
                   ),
                 ),
                 ListTile(
@@ -135,7 +128,7 @@ class _PackagesState extends State<Packages> {
                     ),
                   ),
                 ),
-                (x.cuurentprogram!=null)?Container(
+                (appProviderInstance.cuurentprogram!=null)?Container(
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -143,9 +136,9 @@ class _PackagesState extends State<Packages> {
                       return InkWell(
                         onTap: () {
                           setState(() {
-                            c=x.cuurentprogram.collections[index];
+                            currentCollection=appProviderInstance.cuurentprogram.collections[index];
                           });
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => programdetails(x.cuurentprogram.collections[index],x.choosedprogram,),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => programdetails(appProviderInstance.cuurentprogram.collections[index],appProviderInstance.choosedprogram,),));
                         },
 
                         child: Card(
@@ -155,7 +148,7 @@ class _PackagesState extends State<Packages> {
                             width: MediaQuery.of(context).size.width/1.5,
                             decoration: BoxDecoration(
                               //  color: Colors.white,
-                              color: (x.cuurentprogram.collections[index]==c)?Colors.black12:Colors.white,
+                              color: (appProviderInstance.cuurentprogram.collections[index]==currentCollection)?Colors.black12:Colors.white,
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                             child: Column(
@@ -165,7 +158,7 @@ class _PackagesState extends State<Packages> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.0),
                                     image: DecorationImage(
-                                        image: NetworkImage(x.cuurentprogram.collections[index].image),
+                                        image: NetworkImage(appProviderInstance.cuurentprogram.collections[index].image),
                                         fit : BoxFit.fill
                                     ),
                                   ),
@@ -182,7 +175,7 @@ class _PackagesState extends State<Packages> {
                                         ),
                                       ),
                                       Text(
-                                        x.cuurentprogram.collections[index].title,
+                                        appProviderInstance.cuurentprogram.collections[index].title,
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 20.0,
@@ -201,7 +194,7 @@ class _PackagesState extends State<Packages> {
                                             Text("Collection Description : ".tr,
                                               style: textStyle
                                             ),
-                                            Text("${x.cuurentprogram.description}",
+                                            Text("${appProviderInstance.cuurentprogram.description}",
                                               style: textStyle
                                             ),
                                           ],
@@ -210,16 +203,16 @@ class _PackagesState extends State<Packages> {
                                       ),
                                       Row(
                                         children: [
-                                          x.cuurentprogram.collections[index].launch?Text("Launch / ".tr,
+                                          appProviderInstance.cuurentprogram.collections[index].launch?Text("Launch / ".tr,
                                             style: textStyle
                                           ):Container(),
-                                          x.cuurentprogram.collections[index].dinner?Text("Dinner / ".tr,
+                                          appProviderInstance.cuurentprogram.collections[index].dinner?Text("Dinner / ".tr,
                                             style: textStyle
                                           ):Container(),
-                                          x.cuurentprogram.collections[index].breakfast?Text("Break Fast / ".tr,
+                                          appProviderInstance.cuurentprogram.collections[index].breakfast?Text("Break Fast / ".tr,
                                             style: textStyle
                                           ):Container(),
-                                          x.cuurentprogram.collections[index].snacks?Text("Snacks".tr,
+                                          appProviderInstance.cuurentprogram.collections[index].snacks?Text("Snacks".tr,
                                             style: textStyle
                                           ):Container(),
                                         ],
@@ -231,7 +224,7 @@ class _PackagesState extends State<Packages> {
                                             Text("Number Of Days : ".tr,
                                               style: textStyle
                                             ),
-                                            Text("${x.cuurentprogram.collections[index].dayss.numodfays}",
+                                            Text("${appProviderInstance.cuurentprogram.collections[index].dayss.numodfays}",
                                               style: textStyle
                                             ),
                                             Text(" Days".tr,
@@ -243,7 +236,7 @@ class _PackagesState extends State<Packages> {
                                     ],
                                   ),
                                   trailing: Text(
-                                    '${x.cuurentprogram.collections[index].price.toString()} KWD',
+                                    '${appProviderInstance.cuurentprogram.collections[index].price.toString()} KWD',
                                     style: TextStyle(
                                         color: Color(0xff36a9e0),
                                         fontSize: 18.0,
@@ -252,7 +245,7 @@ class _PackagesState extends State<Packages> {
                                   ),
                                   onTap: (){
                                     setState(() {
-                                      c=x.cuurentprogram.collections[index];
+                                      currentCollection=appProviderInstance.cuurentprogram.collections[index];
                                     });
                                   },
                                 )
@@ -264,7 +257,7 @@ class _PackagesState extends State<Packages> {
                       );
                     },
                     scrollDirection: Axis.vertical,
-                    itemCount: x.cuurentprogram.collections.length,
+                    itemCount: appProviderInstance.cuurentprogram.collections.length,
                   ),
                 ):Container(),
               ],

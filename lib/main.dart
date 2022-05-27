@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
-import 'package:provider/provider.dart'as p;
+import 'package:provider/provider.dart';
 import 'package:target/providers/AppProvider.dart';
 import 'Modules/SplashScreen/Splashscreen,dart.dart';
 import 'helpers/Translations.dart';
@@ -24,7 +24,7 @@ void main() async {
     x=0;
   }
   runApp(
-    p.ChangeNotifierProvider(
+    ChangeNotifierProvider(
       create: (context) => appProvider((prefs.getString('Lang') ?? "Eng"),x,(DateTime.parse(prefs.getString("startdate")??DateTime.now().toString()))),
       child:    MyApp((prefs.getString('Lang') ?? "Eng")),
     ),

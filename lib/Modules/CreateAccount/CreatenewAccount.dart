@@ -43,6 +43,8 @@ class _createnewaccountState extends State<createnewaccount> {
 
   void initState() {
     appProviderInstance = Provider.of<appProvider>(context, listen: false);
+    print("from crate account");
+    print(appProviderInstance.user);
     if (appProviderInstance.user != null) {
       appProviderInstance.gender = appProviderInstance.user.gender;
       appProviderInstance.name.text = appProviderInstance.user.name;
@@ -50,7 +52,7 @@ class _createnewaccountState extends State<createnewaccount> {
       appProviderInstance.email.text = appProviderInstance.user.email;
       appProviderInstance.password.text = appProviderInstance.user.password;
       appProviderInstance.confirmpassword.text =
-          appProviderInstance.user.confirmpassword;
+          appProviderInstance.user.confirmPassword;
       appProviderInstance.birthDate = appProviderInstance.user.birthdate;
       appProviderInstance.block.text =
           appProviderInstance.user.block.toString();
@@ -63,7 +65,14 @@ class _createnewaccountState extends State<createnewaccount> {
       appProviderInstance.street.text = appProviderInstance.user.Street;
       appProviderInstance.selectedCity = appProviderInstance.user.city;
       appProviderInstance.selectedArea = appProviderInstance.user.area;
+      print(appProviderInstance.street.text);
     }
+    else{
+      Future.delayed(Duration.zero, () {
+        appProviderInstance.resetTextFields();
+      });
+    }
+
     super.initState();
   }
   @override
@@ -94,11 +103,11 @@ class _createnewaccountState extends State<createnewaccount> {
                   child: ListView(
                     scrollDirection: Axis.vertical,
                     children: [
-                      field('Full Name'.tr, Icons.person, TextInputType.text, appProviderInstance.name, nameKey, (MediaQuery.of(context).size.width), appProviderInstance),
-                      field('Email Address'.tr, Icons.email, TextInputType.emailAddress, appProviderInstance.email, emailKey, (MediaQuery.of(context).size.width), appProviderInstance),
+                      buildField('Full Name'.tr, Icons.person, TextInputType.text, appProviderInstance.name, nameKey, (MediaQuery.of(context).size.width), appProviderInstance),
+                      buildField('Email Address'.tr, Icons.email, TextInputType.emailAddress, appProviderInstance.email, emailKey, (MediaQuery.of(context).size.width), appProviderInstance),
                       Column(
                         children: [
-                          field('Mobile Number'.tr, Icons.phone_android, TextInputType.number, appProviderInstance.mobile, mobileNumberKey, (MediaQuery.of(context).size.width), appProviderInstance),
+                          buildField('Mobile Number'.tr, Icons.phone_android, TextInputType.number, appProviderInstance.mobile, mobileNumberKey, (MediaQuery.of(context).size.width), appProviderInstance),
                           Text(
                             'Kindly Note This number will be used for login'.tr,
                             style: TextStyle(
@@ -108,8 +117,8 @@ class _createnewaccountState extends State<createnewaccount> {
                           ),
                         ],
                       ),
-                      field('Password'.tr, Icons.lock, TextInputType.text, appProviderInstance.password, passwordKey, (MediaQuery.of(context).size.width), appProviderInstance),
-                      field('Confirm Password'.tr, Icons.lock, TextInputType.text, appProviderInstance.confirmpassword, ConfirmPassword, (MediaQuery.of(context).size.width), appProviderInstance),
+                      buildField('Password'.tr, Icons.lock, TextInputType.text, appProviderInstance.password, passwordKey, (MediaQuery.of(context).size.width), appProviderInstance),
+                      buildField('Confirm Password'.tr, Icons.lock, TextInputType.text, appProviderInstance.confirmpassword, ConfirmPassword, (MediaQuery.of(context).size.width), appProviderInstance),
                       ListTile(
                         title: Text(
                           'Date of Birth'.tr,
@@ -282,25 +291,19 @@ class _createnewaccountState extends State<createnewaccount> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ValueListenableBuilder<String>(
-                            valueListenable: appProviderInstance
-                                .userAddressName,
-
+                            valueListenable: appProviderInstance.userAddressName,
                             builder: (context, value, _) {
                               Future.delayed(Duration.zero, () {
                                 appProviderInstance.street.text = value;
                                 return Container();
                               });
-                              return field(
+                              return buildField(
                                   'Address Street'.tr,
                                   Icons.location_city,
                                   TextInputType.text,
                                   appProviderInstance.street,
                                   streetKey,
-                                  (MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width - 50) * 0.9,
-                                  appProviderInstance);
+                                  (MediaQuery.of(context).size.width - 50) * 0.9, appProviderInstance);
                               //return Flexible(child: AutoSizeText(value));
                             },
                           ),
@@ -324,7 +327,7 @@ class _createnewaccountState extends State<createnewaccount> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                field(
+                                buildField(
                                     'Block Number'.tr,
                                     Icons.home,
                                     TextInputType.number,
@@ -333,7 +336,7 @@ class _createnewaccountState extends State<createnewaccount> {
                                     constraints.maxWidth * 0.45,
                                     appProviderInstance),
 
-                                field(
+                                buildField(
                                     'Building Number'.tr,
                                     Icons.apartment,
                                     TextInputType.number,
@@ -351,7 +354,7 @@ class _createnewaccountState extends State<createnewaccount> {
                                 mainAxisAlignment: MainAxisAlignment
                                     .spaceAround,
                                 children: [
-                                  field(
+                                  buildField(
                                       'Floor Number'.tr,
                                       Icons.home,
                                       TextInputType.number,
@@ -359,7 +362,7 @@ class _createnewaccountState extends State<createnewaccount> {
                                       floorNumberKey,
                                       constraintss.maxWidth * 0.45,
                                       appProviderInstance),
-                                  field(
+                                  buildField(
                                       'Flat Number'.tr,
                                       Icons.home,
                                       TextInputType.number,
@@ -390,7 +393,7 @@ class _createnewaccountState extends State<createnewaccount> {
                                 .showSnackBar(snack('fields Required!'.tr));
                           } else {
 
-                            appProviderInstance.updateuser();
+                            appProviderInstance.updateUser();
                             if (appProviderInstance.currentcollection !=
                                 null) {
                               Navigator.push(

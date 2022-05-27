@@ -6,16 +6,11 @@ class User{
   String mobilenumber="";
   String email="";
   DateTime birthdate;
-  // int bithdateday;
-  // String bithdatemonth='January'.tr;
-  // int birthdateyear;
   String gender="male";
   String password="";
-  String confirmpassword="";
+  String confirmPassword="";
   String city="";
   String area="";
- // String address="";
-  //String map_address_pin="";
   String block="";
   String Floor="";
   String Appointment="";
@@ -23,17 +18,13 @@ class User{
   String Building="";
 
   User(
-   //   this.id,
       this.name,
       this.mobilenumber,
       this.email,
       this.birthdate,
-      // this.bithdateday,
-      // this.bithdatemonth,
-      // this.birthdateyear,
       this.gender,
       this.password,
-      this.confirmpassword,
+      this.confirmPassword,
       this.city,
       this.area,
       this.block,
@@ -41,7 +32,5 @@ class User{
       this.Appointment,
       this.Building,
       this.Street,);
-  //    this.address,
-      //this.map_address_pin);
 
 }
