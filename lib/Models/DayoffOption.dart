@@ -1,4 +1,0 @@
-enum  dayofoption{
-  friday,
-  saturday
-}
