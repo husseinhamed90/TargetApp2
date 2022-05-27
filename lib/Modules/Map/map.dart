@@ -1,7 +1,11 @@
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:target/providers/AppProvider.dart';
 class map extends StatefulWidget {
   // double lat,lang;
   // map(this.lat,this.lang);
@@ -12,13 +16,18 @@ class map extends StatefulWidget {
 class _mapState extends State<map> {
 
   Set<Marker> mymarkers={};
+  Address first;
+  appProvider appProviderInstance=null;
   double lat,lang;
   void initState (){
+     appProviderInstance =Provider.of<appProvider>(context,listen: false);
+
     getcurrentlocation();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       bottomSheet: GestureDetector(
         child: Container(
@@ -35,6 +44,7 @@ class _mapState extends State<map> {
                 style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
+                appProviderInstance.setUserAddressName(first.addressLine);
                 Navigator.pop(context);
               }
           ),
@@ -81,10 +91,10 @@ class _mapState extends State<map> {
     );
   }
   Future<Geolocator> getcurrentlocation() async{
-    setState(() {
-      lat=null;
-      lang=null;
-    });
+        setState(() {
+          lat=null;
+          lang=null;
+        });
 
       Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) {
         setState(() {
@@ -102,6 +112,12 @@ class _mapState extends State<map> {
           lang=-1;
         });
 
+      }).then((value) async {
+        final coordinates = new Coordinates(lat, lang);
+        final addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+         first = addresses.first;
+        appProviderInstance.setUserAddressName(first.addressLine);
+         // print("${first.addressLine}");
       });
-
-}}
+  }
+}

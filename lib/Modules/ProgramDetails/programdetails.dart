@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:target/Models/Collection.dart';
 import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
+import 'package:target/Modules/CreateAccount/CreatenewAccount.dart';
+import 'package:target/Modules/Summary/Summry.dart';
 import 'package:target/providers/AppProvider.dart';
+import 'package:target/shared/components.dart';
 
 
 class programdetails extends StatefulWidget {
@@ -22,7 +25,7 @@ class _DetailsState extends State<programdetails> {
 
   @override
   Widget build(BuildContext context) {
-    final x =Provider.of<appProvider>(context);
+    final appProviderInstance =Provider.of<appProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -70,20 +73,10 @@ class _DetailsState extends State<programdetails> {
                   //  mainAxisSize: MainAxisSize.max,
                   scrollDirection: Axis.vertical,
                   children: [
-                    // Align(
-                    //   alignment: Alignment.topCenter,
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(top: 15),
-                    //     child: Text(
-                    //       'Collection Details'.tr,
-                    //       style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-                    //     ),
-                    //   ),
-                    // ),
-                    item('Collection Name'.tr, widget.currentcollection.title),
-                    item('Target Name'.tr, widget.currentprogram),
-                    item('Collection Days'.tr, "${widget.currentcollection.dayss.numodfays}"),
-                    item('Off Days'.tr, "${getDays(x)}"),
+                    item('Collection Name'.tr, widget.currentcollection.title,iscouponapplied,widget.currentcollection),
+                    item('Target Name'.tr, widget.currentprogram,iscouponapplied,widget.currentcollection),
+                    item('Collection Days'.tr, "${widget.currentcollection.dayss.numodfays}",iscouponapplied,widget.currentcollection),
+                    item('Off Days'.tr, "${getDays(appProviderInstance)}",iscouponapplied,widget.currentcollection),
                     //item('Collection Meals', 'Breakfast, Launch, Dinner & Snacks'),
                     ListTile(
                       title: Text(
@@ -128,7 +121,7 @@ class _DetailsState extends State<programdetails> {
                         ],
                       ),
                     ),
-                    item('Collection Fee : '.tr, '${widget.currentcollection.price} KWD'),
+                    item('Collection Fee : '.tr, '${widget.currentcollection.price} KWD',iscouponapplied,widget.currentcollection),
                     Padding(
                       padding: const EdgeInsets.only(bottom:15.0,left: 10,right: 10),
                       child: Container(
@@ -174,7 +167,7 @@ class _DetailsState extends State<programdetails> {
                               onTap: () {
                                 if(promoController.text!=""){
 
-                                  if(x.iscouponvalid(promoController.text)){
+                                  if(appProviderInstance.iscouponvalid(promoController.text)){
                                     setState(() {
                                       iscouponapplied=true;
                                       newprice=widget.currentcollection.price*((100-50)/100);
@@ -186,9 +179,7 @@ class _DetailsState extends State<programdetails> {
                                       backgroundColor: Colors.red,
                                     ));
                                   }
-
                                 }
-
                               },
                               child: Container(
 
@@ -214,33 +205,23 @@ class _DetailsState extends State<programdetails> {
                       children: [
                         InkWell(
                           onTap: () {
-                            x.resetmeals();
+                            appProviderInstance.resetmeals();
                             if(widget.currentcollection.launch){
-                              x.launchcheckedValue=true;
+                              appProviderInstance.launchcheckedValue=true;
                             }
                             if(widget.currentcollection.dinner){
-                              x.dinnercheckedValue=true;
+                              appProviderInstance.dinnercheckedValue=true;
                             }
                             if(widget.currentcollection.breakfast){
-                              x.breakfastcheckedValue=true;
+                              appProviderInstance.breakfastcheckedValue=true;
                             }
                             if(widget.currentcollection.snacks){
-                              x.snackscheckedValue=true;
+                              appProviderInstance.snackscheckedValue=true;
                             }
-                            x.updatecCollection(widget.currentcollection);
-                            x.startdate=DateTime.now().add(new Duration(days:2));
-                            x.enddate=DateTime.now().add(new Duration(days:x.currentcollection.dayss.numodfays+1));
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => selectmeals(widget.currentcollection)));
-                            // if(x.user!=null){
-                            //   x.updatecCollection(widget.currentcollection);
-                            //   Navigator.push(context, MaterialPageRoute(builder: (context) => Summry(),));
-                            // }
-                            // else{
-                            x.updatecCollection(widget.currentcollection);
-                            x.startdate=DateTime.now().add(new Duration(days:2));
-                            x.enddate=DateTime.now().add(new Duration(days:x.currentcollection.dayss.numodfays+1));
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => selectmeals(widget.currentcollection)));
-
+                            appProviderInstance.updatecCollection(widget.currentcollection);
+                            appProviderInstance.startdate=DateTime.now().add(new Duration(days:2));
+                            appProviderInstance.enddate=DateTime.now().add(new Duration(days:appProviderInstance.currentcollection.dayss.numodfays+1));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount()));
                           },
                           child: Container(
 
@@ -273,74 +254,11 @@ class _DetailsState extends State<programdetails> {
   }
   String getDays(appProvider approvider){
     String days ="";
-    print(widget.currentcollection.dayss.dayoff);
     widget.currentcollection.dayss.dayoff.forEach((element) {
       days+=approvider.dayData[element].tr+" / ";
     });
     return days;
 
   }
-  item(String title, String subtitle) {
-    if(title=="Collection Fee : "){
-      return ListTile(
-        title: AutoSizeText(
-          title,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold
-          ),
-        ),
-        subtitle: Row(
-          children: [
-            Stack(
-              children: [
-                AutoSizeText(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
 
-                  ),
-                ),
-                (iscouponapplied)?Positioned(right: 0,top: 7,child: Container(width: 70,height: 2,color: Colors.white,)):Container()
-              ],
-            ),
-            SizedBox(width: 10,),
-            (iscouponapplied)?AutoSizeText(
-              "${newprice.toString()} KWD",
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-
-              ),
-            ):Container(),
-          ],
-        ),
-      );
-    }
-    else{
-      return ListTile(
-        title: AutoSizeText(
-          title,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold
-          ),
-        ),
-        subtitle: AutoSizeText(
-          subtitle,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-
-  }
 }

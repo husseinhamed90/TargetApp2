@@ -17,7 +17,7 @@ class Summry extends StatefulWidget {
 class _SummryState extends State<Summry> {
   @override
   Widget build(BuildContext context) {
-    final x =Provider.of<appProvider>(context);
+    final appProvider_Instance =Provider.of<appProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -85,10 +85,10 @@ class _SummryState extends State<Summry> {
                           child: LayoutBuilder(builder: (context, constraints) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              getRow(constraints, "Full Name: ", "${x.user.name}",x),
-                              getRow(constraints, "Email: ", "${x.user.email}",x),
-                              getRow(constraints, "BirthDate: ", "${x.user.birthdate.toString().substring(0, 10)}",x),
-                              getRow(constraints, "Mobile Number: ", "${x.user.mobilenumber}",x),
+                              getRow(constraints, "Full Name: ", "${appProvider_Instance.user.name}",appProvider_Instance),
+                              getRow(constraints, "Email: ", "${appProvider_Instance.user.email}",appProvider_Instance),
+                              getRow(constraints, "BirthDate: ", "${appProvider_Instance.user.birthdate.toString().substring(0, 10)}",appProvider_Instance),
+                              getRow(constraints, "Mobile Number: ", "${appProvider_Instance.user.mobilenumber}",appProvider_Instance),
                             ],
                           ),),
                         )
@@ -135,38 +135,38 @@ class _SummryState extends State<Summry> {
                           child: LayoutBuilder(builder: (context, constraints) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              getRow(constraints, "Target Name: ", "${x.choosedprogram}",x),
-                              getRow(constraints, "Collection Name : ", "${x.currentcollection.title}",x),
-                              getRow(constraints, "Days: ", "${x.currentcollection.dayss.numodfays}",x),
-                              getRow(constraints, "Fee: ", "${x.currentcollection.price} KWD",x),
-                              getRow(constraints, "Collection Meals:- ", "",x),
+                              getRow(constraints, "Target Name: ", "${appProvider_Instance.choosedprogram}",appProvider_Instance),
+                              getRow(constraints, "Collection Name : ", "${appProvider_Instance.currentcollection.title}",appProvider_Instance),
+                              getRow(constraints, "Days: ", "${appProvider_Instance.currentcollection.dayss.numodfays}",appProvider_Instance),
+                              getRow(constraints, "Fee: ", "${appProvider_Instance.currentcollection.price} KWD",appProvider_Instance),
+                              getRow(constraints, "Collection Meals:- ", "",appProvider_Instance),
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Row(
                                   children: [
 
-                                    x.currentcollection.launch?Text("Launch / ".tr,
+                                    appProvider_Instance.currentcollection.launch?Text("Launch / ".tr,
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold
                                       ),
                                     ):Container(),
-                                    x.currentcollection.dinner?Text("Dinner / ".tr,
+                                    appProvider_Instance.currentcollection.dinner?Text("Dinner / ".tr,
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold
                                       ),
                                     ):Container(),
-                                    x.currentcollection.breakfast?Text("Break Fast / ".tr,
+                                    appProvider_Instance.currentcollection.breakfast?Text("Break Fast / ".tr,
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold
                                       ),
                                     ):Container(),
-                                    x.currentcollection.snacks?Text("Snacks / ".tr,
+                                    appProvider_Instance.currentcollection.snacks?Text("Snacks / ".tr,
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 18.0,
@@ -196,13 +196,13 @@ class _SummryState extends State<Summry> {
             children: [
               InkWell(
                 onTap: () {
-                  x.startdate=DateTime.now().add(new Duration(days:2));
-                  x.enddate=DateTime.now().add(new Duration(days:x.currentcollection.dayss.numodfays+1));
-                  x.resetmeals();
+                  appProvider_Instance.startdate=DateTime.now().add(new Duration(days:2));
+                  appProvider_Instance.enddate=DateTime.now().add(new Duration(days:appProvider_Instance.currentcollection.dayss.numodfays+1));
+                  //appProvider_Instance.resetmeals();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => selectmeals(x.currentcollection),
+                        builder: (context) => selectmeals(appProvider_Instance.currentcollection),
                       ));
                 },
                 child: Container(
@@ -224,9 +224,9 @@ class _SummryState extends State<Summry> {
               SizedBox(height: 10,),
               InkWell(
                 onTap: () {
-                  x.startdate=DateTime.now().add(new Duration(days:2));
-                  x.enddate=DateTime.now().add(new Duration(days:x.daysoptions[x.currentcollection.days_id].numodfays+1));
-                  x.resetmeals();
+                  appProvider_Instance.startdate=DateTime.now().add(new Duration(days:2));
+                  appProvider_Instance.enddate=DateTime.now().add(new Duration(days:appProvider_Instance.daysoptions[appProvider_Instance.currentcollection.days_id].numodfays+1));
+                  appProvider_Instance.resetmeals();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

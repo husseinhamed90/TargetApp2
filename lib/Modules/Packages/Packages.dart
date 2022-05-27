@@ -22,7 +22,11 @@ class _PackagesState extends State<Packages> {
     c=x.currentcollection;
     p=x.cuurentprogram;
   }
-
+  TextStyle textStyle =TextStyle(
+      color: Colors.grey,
+      fontSize: 15.0,
+      fontWeight: FontWeight.bold
+  );
   @override
   Widget build(BuildContext context) {
     final x =Provider.of<appProvider>(context);
@@ -195,18 +199,10 @@ class _PackagesState extends State<Packages> {
                                         child: Row(
                                           children: [
                                             Text("Collection Description : ".tr,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                              style: textStyle
                                             ),
                                             Text("${x.cuurentprogram.description}",
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                              style: textStyle
                                             ),
                                           ],
                                         ),
@@ -215,32 +211,16 @@ class _PackagesState extends State<Packages> {
                                       Row(
                                         children: [
                                           x.cuurentprogram.collections[index].launch?Text("Launch / ".tr,
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold
-                                            ),
+                                            style: textStyle
                                           ):Container(),
                                           x.cuurentprogram.collections[index].dinner?Text("Dinner / ".tr,
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold
-                                            ),
+                                            style: textStyle
                                           ):Container(),
                                           x.cuurentprogram.collections[index].breakfast?Text("Break Fast / ".tr,
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold
-                                            ),
+                                            style: textStyle
                                           ):Container(),
                                           x.cuurentprogram.collections[index].snacks?Text("Snacks".tr,
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold
-                                            ),
+                                            style: textStyle
                                           ):Container(),
                                         ],
                                       ),
@@ -249,26 +229,13 @@ class _PackagesState extends State<Packages> {
                                         child: Row(
                                           children: [
                                             Text("Number Of Days : ".tr,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                              style: textStyle
                                             ),
-
                                             Text("${x.cuurentprogram.collections[index].dayss.numodfays}",
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                              style: textStyle
                                             ),
                                             Text(" Days".tr,
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                              style: textStyle
                                             ),
                                           ],
                                         ),

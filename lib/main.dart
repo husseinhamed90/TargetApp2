@@ -1,14 +1,11 @@
-//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:provider/provider.dart'as p;
 import 'package:target/providers/AppProvider.dart';
-
 import 'Modules/SplashScreen/Splashscreen,dart.dart';
 import 'helpers/Translations.dart';
 
@@ -18,6 +15,8 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final SharedPreferences prefs = await _prefs;
   print(prefs.getString("startdate")??DateTime.now().toString());
   int x =(DateTime.now()).difference(DateTime.parse(prefs.getString("startdate")??DateTime.now().toString())).inDays;
@@ -33,8 +32,8 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  String s="";
-  MyApp(this.s);
+  String language="";
+  MyApp(this.language);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -54,8 +53,8 @@ class _MyAppState extends State<MyApp> {
       home: SplachScreen(),
 
       localizationsDelegates: translator.delegates,
-      locale: Locale(widget.s),
-      fallbackLocale: Locale(widget.s),
+      locale: Locale(widget.language),
+      fallbackLocale: Locale(widget.language),
     );
   }
 }

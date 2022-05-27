@@ -23,7 +23,7 @@ class Collection{
   int days_id =0;
   int discount_id=0;
   days dayss;
-  String breakfastmeal(){
+  String breakFastMeal(){
     if(breakfast){
       return "BreakFast";
     }
@@ -31,7 +31,7 @@ class Collection{
       return "";
     }
   }
-  String dinnermeal(){
+  String Dinnereal(){
     if(dinner){
       return "Dinner";
     }
@@ -73,13 +73,11 @@ class Collection{
       this.days_id,
       this.discount_id);
 
-  Collection.usginopjects(
-      //this.id,
+  Collection.usingObjects(
       this.title,
       this.description,
       this.image,
       this.price,
-      //this.created_date,
       this.program_id,
       this.breakfast,
       this.launch,
@@ -88,5 +86,4 @@ class Collection{
       this.number_of_snacks,
       this.dayss,
       this.discount_id);
-
 }

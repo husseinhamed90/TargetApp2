@@ -57,6 +57,27 @@ class appProvider extends ChangeNotifier{
   bool snackscheckedValue=false;
   bool launchcheckedValue=false;
 
+  TextEditingController name = TextEditingController();
+  TextEditingController mobile = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController birthdate = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmpassword = TextEditingController();
+  TextEditingController day = TextEditingController();
+  TextEditingController month = TextEditingController();
+  TextEditingController year = TextEditingController();
+  TextEditingController block = TextEditingController();
+  TextEditingController street = TextEditingController();
+  TextEditingController building = TextEditingController();
+  TextEditingController Floor = TextEditingController();
+  TextEditingController Appointmnet = TextEditingController();
+
+  DateTime birthDate = DateTime(1960);
+  var gender;
+  String selectedCity = 'Select City'.tr;
+
+  String selectedArea = 'Select Area'.tr;
+
   Map<DateTime, List<List<meal>>> events={};
   Map<DateTime, Map<String,List<meal>>> mealsmap = {};
   List<dynamic> selectedEvents=[];
@@ -64,8 +85,85 @@ class appProvider extends ChangeNotifier{
   var user;
   List<int>numbers=[];
 
-  void updateuser(User updatedinfo){
-    user=updatedinfo;
+  ValueNotifier<String> userAddressName=ValueNotifier("");
+  ValueNotifier<bool> pressed=ValueNotifier(false);
+  void changeStateOfpressed(){
+    pressed.value=!pressed.value;
+    notifyListeners();
+  }
+  void updateuser(){
+    user = User(
+        name.text,
+        mobile.text,
+        email.text,
+        birthDate,
+        gender,
+        password.text,
+        confirmpassword.text,
+        selectedCity,
+        selectedArea,
+        (block.text == "")
+            ? ""
+            :block.text,
+        (Floor.text == "")
+            ? ""
+            : Floor.text,
+        (Appointmnet.text == "")
+            ? ""
+            : Appointmnet.text,
+        (building.text == "")
+            ? ""
+            : building.text,
+        street.text);
+
+    notifyListeners();
+  }
+  String validateForm(String label,String value){
+    if (label == "Full Name".tr || label == "Mobile Number".tr ) {
+      if (value.isEmpty) {
+        return 'This Field required?'.tr;
+      } else {
+        return null;
+      }
+    }
+    else if(label == "Password".tr){
+      if (value.isEmpty) {
+        return "This Field required?".tr;
+      } else {
+        if (value.length<6) {
+          return "Password must be at least 6 characters".tr;
+        } else {
+          return null;
+        }
+      }
+    }
+    else if (label == "Confirm Password".tr) {
+      if (value.isEmpty) {
+        return "This Field required?".tr;
+      } else {
+        if (value != password.text) {
+          print(value);
+          print(password.text);
+          return "Passwords not matched".tr;
+        } else {
+          return null;
+        }
+      }
+    }
+    else if(label == "Address Street".tr){
+
+      if (value.isEmpty) {
+        return "Please Enter Your Enter Or Click on The Location Icon".tr;
+      } else {
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+  void setUserAddressName(String address){
+    userAddressName.value=address;
     notifyListeners();
   }
   List<meal>breakfastmeals=[];
@@ -121,16 +219,16 @@ class appProvider extends ChangeNotifier{
       meal(5,"meal 5", "meal 5 description ", Categories.Launch, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU"),
     ];
     collections=[
-      Collection.usginopjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[1], 1),
-      Collection.usginopjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 300,1,true, false, true, true,10,daysoptions[2], 1),
+      Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[1], 1),
+      Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 300,1,true, false, true, true,10,daysoptions[2], 1),
 
     ];
     collections2=[
-      Collection.usginopjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false, true,10,daysoptions[2], 1),
+      Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false, true,10,daysoptions[2], 1),
     ];
     collections3=[
-      Collection.usginopjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[0], 1),
-      Collection.usginopjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 300,1,true, false, true,true, 10,daysoptions[2], 1)
+      Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[0], 1),
+      Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 300,1,true, false, true,true, 10,daysoptions[2], 1)
     ];
     programss=[
       program(1,"Ta5ses","description","https://cdn.al-ain.com/images/2020/11/18/173-152814-best-diet-slimming-gym_700x400.jpg",collections),
@@ -139,12 +237,12 @@ class appProvider extends ChangeNotifier{
     ];
     //notifyListeners();
   }
-  bool validateusernameandpassword(String username ,String password){
+  bool validateusernameandpassword(String mobileNumber ,String password){
     //get user information from api
-    User user = User(
+    user = User(
         "User 1",
-        username,
-        "${username}@gmail.com",
+         mobileNumber,
+        "User1@gmail.com",
         DateTime.now(),
 
         "male",
@@ -157,8 +255,9 @@ class appProvider extends ChangeNotifier{
         "2",
         "2",
         "street");
-    updatecCollection( Collection.usginopjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[2], 1),);
-    updateuser(user);
+    print(daysoptions[2].dayoff);
+    updatecCollection( Collection.usingObjects("title", "description", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfUJTW2BQ9BkdnlmVrc82T-Mg2teG0S-y87Q&usqp=CAU", 200,2,false, true, false,true, 10,daysoptions[2], 1),);
+    notifyListeners();
     //get user info from the server
     return true;
   }
@@ -224,7 +323,6 @@ class appProvider extends ChangeNotifier{
     }
   }
   bool ismealexist(meal newmeal,List<meal>list){
-
     for(int i=0;i<list.length;i++){
       if(list[i].id==newmeal.id){
         return true;
@@ -255,6 +353,7 @@ class appProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
+  Map<String,List<meal>>chosenMeals={};
   void resetmeals(){
     chossenlaunchmeals=[];
     choosendinnermeals=[];
@@ -264,13 +363,11 @@ class appProvider extends ChangeNotifier{
     selectedEvents=[];
     Chossenpackage="";
     chossensnacks=[];
-    //notifyListeners();
+    notifyListeners();
   }
   void addtolist(meal newmeal,String x,DateTime dateTime){
     meal newmea=meal.withdate(newmeal.id,newmeal.name,newmeal.description,newmeal.mealcategory,
         newmeal.url,dateTime);
-
-
     if(x=="BreakFast".tr){
       allchoosenbreakfastmeals.add(newmea);
       choosenbreakfastmeals.add(newmeal);
@@ -284,6 +381,7 @@ class appProvider extends ChangeNotifier{
     else if(x=="Launch".tr){
       allchossenlaunchmeals.add(newmea);
       chossenlaunchmeals.add(newmeal);
+      chosenMeals["launch"]=allchossenlaunchmeals;
       notifyListeners();
     }
     else if(x=="Snacks".tr){

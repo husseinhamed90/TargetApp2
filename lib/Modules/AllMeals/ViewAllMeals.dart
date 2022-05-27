@@ -322,19 +322,14 @@ class _ResultState extends State<Result> {
 
   }
   void removeoldmeals(String s, appProvider xx) {
-    Categories categories;
     List<meal> meals;
     if (s == "Launch".tr) {
-      categories = Categories.Launch;
       meals = xx.chossenlaunchmeals;
     } else if (s == "BreakFast".tr) {
-      categories = Categories.Breakfast;
       meals = xx.choosenbreakfastmeals;
     } else if (s == "Dinner".tr) {
-      categories = Categories.Dinner;
       meals = xx.choosendinnermeals;
     } else if(s=="Snacks".tr){
-      categories = Categories.Snacks;
       meals = xx.chossensnacks;
     }
     if (widget.events[widget.calendarController.selectedDay] != null ) {

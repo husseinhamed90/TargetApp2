@@ -99,9 +99,6 @@ class _selectmealsState extends State<selectmeals> {
                     startDay: DateTime.now().add(new Duration(days:2)),
                     endDay: DateTime.now().add(new Duration(days: xx.daysoptions[widget.currentcollection.days_id].numodfays+1)),
                     onDaySelected: (dayy, events, holidays) {
-                      print(xx.currentcollection.dayss.dayoff);
-                      print(dayy.weekday);
-                      //print(xx.currentcollection.dayss.dayoff.contains(dayy.weekday));
                       isHoliday=xx.currentcollection.dayss.dayoff.contains(dayy.weekday);
                       if(xx.currentcollection.dayss.dayoff.contains(dayy.weekday)){
 
@@ -114,10 +111,9 @@ class _selectmealsState extends State<selectmeals> {
                           dateTime = dayy;
                           _selectedEvents = events;
                         });
-                        xx.resetmeals();
                         getmealsfromevent(dayy, xx);
                         if (_events[dayy] == null) {
-                          xx.resetmeals();
+
                         }
                         else {
                           for (int i = 0; i < _events[dayy].length; i++) {
@@ -167,35 +163,19 @@ class _selectmealsState extends State<selectmeals> {
                     style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount()));
-                    //Navigator.pop(context);
+                    Navigator.pop(context);
                   }
               ),
             ),
           ),
-          onTap: () =>   Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount())),
+          onTap: () {
+            Navigator.pop(context);
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount()));
+          }
         )
     );
   }
   Container buildmealslists(double hight,double width ,appProvider xx ,BoxConstraints constraints){
-    double hightt=0.0;
-
-    // if(calendarController.calendarFormat==CalendarFormat.twoWeeks){
-    //   hightt=h*3;
-    // }
-    // else{
-    //   hightt=h*1;
-    // }
-    // if(hightt==null){
-    //   print(null);
-    // }
-   // print(h);
-   //  double x;
-   //  setState(() {
-   //   x=((calendarController.calendarFormat==CalendarFormat.twoWeeks)?h*3:0);
-   //  });
-   //
-   //  print(x);
     return Container(
       height: constraints.maxHeight*0.7-MediaQuery.of(context).size.height*0.1-h*3,
       //height:MediaQuery.of(context).size.height*0.7,
@@ -260,6 +240,7 @@ class _selectmealsState extends State<selectmeals> {
     } else {
       _events[calendarController.selectedDay] = [meals];
     }
+
     setState(() {
       _selectedEvents = _events[calendarController.selectedDay];
     });
@@ -406,7 +387,6 @@ class _selectmealsState extends State<selectmeals> {
                             icon: Icon(
                               Icons.add,color: Colors.black,size: 30,),
                             onPressed: () {
-
                               xx.addtolist(mealss[index],addedlist,calendarController.selectedDay);
                               setState(() {
                                 mealss = xx.meals;
@@ -462,8 +442,13 @@ class _selectmealsState extends State<selectmeals> {
                                 mealsmap[calendarController.selectedDay].forEach((key, value) {
                                   meals.add(value);
                                 });
+
                                 setState(() {
                                   _events[calendarController.selectedDay]=meals;
+                                  if( _events[calendarController.selectedDay].isEmpty){
+                                    _events.remove(calendarController.selectedDay);
+
+                                  }
                                   xx.events=_events;
                                   xx.selectedEvents=_selectedEvents;
                                   xx.mealsmap=mealsmap;

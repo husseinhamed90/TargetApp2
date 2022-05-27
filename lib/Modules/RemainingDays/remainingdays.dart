@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
+import 'package:target/Modules/CreateAccount/CreatenewAccount.dart';
 import 'package:target/Modules/editprofile/editprofileinfo.dart';
 import 'package:target/providers/AppProvider.dart';
 
@@ -102,7 +103,7 @@ class _remainingdaysState extends State<remainingdays> {
                         SizedBox(height: 10,),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => editprifile(),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount(),));
                           },
                           child: Container(
 

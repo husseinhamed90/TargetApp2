@@ -3,6 +3,7 @@ const Map<String ,String>ar={
   "Add Note":"اضافة ملاحظة",
   "Add Note ?":"اضافة ملاحظة ؟",
   "Add your Notes":"اضافة ملاحظات",
+  "Please Enter Your Enter Or Click on The Location Icon":"من فضلك ادخل موقعك او اضغط علي تحديد الموقع",
   "Confirm":"تأكيد الملاحظة",
   "Remove Note":"ازالة الملاحظة",
   "Off Days":"ايام العطلة",

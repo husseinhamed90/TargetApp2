@@ -1,5 +1,6 @@
 const Map<String ,String>en={
   "Add Note":"Add Note",
+  "Please Enter Your Enter Or Click on The Location Icon":"Please Enter Your Enter Or Click on The Location Icon",
   "Add Note ?":"Add Note ?",
   "Add your Notes":"Add your Notes",
   "Confirm":"Confirm Note",
