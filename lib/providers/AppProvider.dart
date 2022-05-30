@@ -407,6 +407,100 @@ class appProvider extends ChangeNotifier{
     }
   }
 
+  void updateAppProvider(widget) {
+    List<List<meal>> meals=[];
+    widget.mealsmap[widget.calendarController.selectedDay].forEach((key, value) {
+      meals.add(value);
+    });
+    widget.currentEvents[widget.calendarController.selectedDay]=meals;
+    updateCurrentEvents(widget.currentEvents);
+    updateSelectedEvents(widget.selectedEvents);
+    updateMealsMap(widget.mealsmap);
+  }
+
+
+  void addMealToOrder(appProvider appProviderInstance, meal currentMeal, String addedlist, widget, List<meal> mealss, Function setStateFunction, List<meal> choosedmeals) {
+    appProviderInstance.addtolist(currentMeal,addedlist,widget.calendarController.selectedDay);
+    mealss = appProviderInstance.meals;
+    appProviderInstance.removeOldMeals(addedlist, appProviderInstance,widget,setStateFunction);
+    if(widget.mealsmap[widget.calendarController.selectedDay]!=null){
+      widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
+    }
+    else{
+      widget.mealsmap[widget.calendarController.selectedDay]={addedlist:choosedmeals};
+    }
+  }
+
+
+  void removeOldMeals(String whichMeal, appProvider appProviderInstance,dynamic widget,Function function) {
+    List<meal> meals;
+    if (whichMeal == "Launch".tr) {
+      meals = appProviderInstance.chossenlaunchmeals;
+    } else if (whichMeal == "BreakFast".tr) {
+      meals = appProviderInstance.choosenbreakfastmeals;
+    } else if (whichMeal == "Dinner".tr) {
+      meals = appProviderInstance.choosendinnermeals;
+    } else if(whichMeal=="Snacks".tr){
+      meals = appProviderInstance.chossensnacks;
+    }
+    if (widget.currentEvents[widget.calendarController.selectedDay] != null ) {
+      if (widget.selectedEvents.length < 3) {
+        if(widget.mealsmap[widget.calendarController.selectedDay].containsKey(whichMeal)){
+          widget.currentEvents[widget.calendarController.selectedDay] = [meals];
+        }
+        else{
+          widget.currentEvents[widget.calendarController.selectedDay].add(meals);
+        }
+      }
+    } else {
+      widget.currentEvents[widget.calendarController.selectedDay] = [meals];
+    }
+        (){
+      function();
+    };
+    appProviderInstance.updateCurrentEvents(widget.currentEvents);
+    appProviderInstance.updateSelectedEvents(widget.selectedEvents);
+  }
+
+  void removeMealFromOrder(appProvider appProviderInstance, meal currentMeal, List<meal> choosedmeals, widget, String addedlist, List<meal> mealss) {
+    appProviderInstance.removefrommeals(currentMeal,choosedmeals,widget.calendarController.selectedDay,addedlist);
+    mealss = appProviderInstance.meals;
+    widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
+    if( widget.mealsmap[widget.calendarController.selectedDay][addedlist].length==0){
+      widget.mealsmap[widget.calendarController.selectedDay].remove(addedlist);
+    }
+  }
+
+  void getMealsFromEvent(DateTime day, appProvider appProviderInstance) {
+    if (appProviderInstance.currentEvents.value[day] == null) {
+      appProviderInstance.resetmeals();
+    }
+    else {
+      for (int i = 0; i < appProviderInstance.currentEvents.value[day].length; i++) {
+        if (appProviderInstance.currentEvents.value[day][i].length > 0) {
+          if (appProviderInstance.currentEvents.value[day][i][0].mealcategory == Categories.Launch) {
+            appProviderInstance.chossenlaunchmeals = appProviderInstance.currentEvents.value[day][i];
+          } else if (appProviderInstance.currentEvents.value[day][i][0].mealcategory == Categories.Breakfast) {
+            appProviderInstance.choosenbreakfastmeals = appProviderInstance.currentEvents.value[day][i];
+          } else if (appProviderInstance.currentEvents.value[day][i][0].mealcategory == Categories.Dinner) {
+            appProviderInstance.choosendinnermeals =appProviderInstance.currentEvents.value[day][i];
+          } else if (appProviderInstance.currentEvents.value[day][i][0].mealcategory == Categories.Snacks) {
+            appProviderInstance.chossensnacks =appProviderInstance.currentEvents.value[day][i];
+          }
+        }
+      }
+    }
+  }
+
+  // String getDays(appProvider appProviderInstance,Collection currentCollection){
+  //   String days ="";
+  //   currentCollection.dayss.dayoff.forEach((element) {
+  //     days+=appProviderInstance.dayData[element].tr+" / ";
+  //   });
+  //   return days;
+  //
+  // }
+
   void removeprogram (String programename){
     for(int i=0;i<Choosenprograms.length;i++){
       if(Choosenprograms[i]==programename){

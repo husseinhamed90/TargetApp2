@@ -1,14 +1,20 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:target/Models/Categories.dart';
 import 'package:target/Models/Collection.dart';
 import 'package:target/Models/Meal.dart';
 import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
 import 'package:target/Modules/ProgramDetails/programdetails.dart';
 import 'package:target/providers/AppProvider.dart';
 
-Widget snack(String content) {
+
+TextStyle textStyle =TextStyle(
+    color: Colors.grey,
+    fontSize: 15.0,
+    fontWeight: FontWeight.bold
+);
+
+Widget buildSnackBar(String content) {
   return SnackBar(
       backgroundColor: Colors.red,
       duration: Duration(seconds: 3),
@@ -156,7 +162,7 @@ Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double hi
   }
 }
 
-Container buildList(double height, List<meal> newList, appProvider appProviderInstance, widget, List<meal> choosedmeals, String addedlist, Function setStateFunction, bool isVertical,TextEditingController noteController) {
+Widget buildList(double height, List<meal> newList, appProvider appProviderInstance, widget, List<meal> choosedmeals, String addedlist, Function setStateFunction, bool isVertical,TextEditingController noteController) {
   return Container(
         color: Color(0xfff5f5f5),
         height: height,
@@ -195,52 +201,19 @@ Widget buildMealItem(BuildContext context,appProvider appProviderInstance,meal c
 }
 
 Widget editOrderButtons(appProvider appProviderInstance,meal currentMeal,dynamic widget,String addedlist,List<meal>choosedmeals,List<meal>mealss,Function setStateFunction){
-
   return IconButton(
     icon: Icon(!appProviderInstance.ismealexist(currentMeal,choosedmeals)?Icons.add:Icons.shopping_cart_outlined,
       color: Colors.black,size: 30,),
       onPressed: () {
         if (!appProviderInstance.ismealexist(currentMeal,choosedmeals)){
-          addMealToOrder(appProviderInstance, currentMeal, addedlist, widget, mealss, setStateFunction, choosedmeals);
+          appProviderInstance.addMealToOrder(appProviderInstance, currentMeal, addedlist, widget, mealss, setStateFunction, choosedmeals);
         }
         else{
-          removeMealFromOrder(appProviderInstance, currentMeal, choosedmeals, widget, addedlist, mealss);
+          appProviderInstance.removeMealFromOrder(appProviderInstance, currentMeal, choosedmeals, widget, addedlist, mealss);
         }
-        updateAppProvider(widget, appProviderInstance);
+        appProviderInstance.updateAppProvider(widget);
       },
   );
-}
-
-void removeMealFromOrder(appProvider appProviderInstance, meal currentMeal, List<meal> choosedmeals, widget, String addedlist, List<meal> mealss) {
-  appProviderInstance.removefrommeals(currentMeal,choosedmeals,widget.calendarController.selectedDay,addedlist);
-  mealss = appProviderInstance.meals;
-  widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
-  if( widget.mealsmap[widget.calendarController.selectedDay][addedlist].length==0){
-    widget.mealsmap[widget.calendarController.selectedDay].remove(addedlist);
-  }
-}
-
-void addMealToOrder(appProvider appProviderInstance, meal currentMeal, String addedlist, widget, List<meal> mealss, Function setStateFunction, List<meal> choosedmeals) {
-  appProviderInstance.addtolist(currentMeal,addedlist,widget.calendarController.selectedDay);
-  mealss = appProviderInstance.meals;
-  removeOldMeals(addedlist, appProviderInstance,widget,setStateFunction);
-  if(widget.mealsmap[widget.calendarController.selectedDay]!=null){
-    widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
-  }
-  else{
-    widget.mealsmap[widget.calendarController.selectedDay]={addedlist:choosedmeals};
-  }
-}
-
-void updateAppProvider(widget, appProvider appProviderInstance) {
-  List<List<meal>> meals=[];
-  widget.mealsmap[widget.calendarController.selectedDay].forEach((key, value) {
-    meals.add(value);
-  });
-  widget.currentEvents[widget.calendarController.selectedDay]=meals;
-  appProviderInstance.updateCurrentEvents(widget.currentEvents);
-  appProviderInstance.updateSelectedEvents(widget.selectedEvents);
-  appProviderInstance.updateMealsMap(widget.mealsmap);
 }
 
 Widget buildImageFromUrl(String url){
@@ -255,6 +228,7 @@ Widget buildImageFromUrl(String url){
     ),
   );
 }
+
 Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal> choosedmeals,BuildContext context,TextEditingController noteController){
   return  Container(
     height: 50,
@@ -293,7 +267,8 @@ Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal>
     ),
   );
 }
-Future<dynamic> customShowBottomSheet(BuildContext context,appProvider appProviderInstance,meal currentMeal,TextEditingController noteController){
+
+customShowBottomSheet(BuildContext context,appProvider appProviderInstance,meal currentMeal,TextEditingController noteController){
   return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -358,6 +333,7 @@ Future<dynamic> customShowBottomSheet(BuildContext context,appProvider appProvid
       }
   );
 }
+
 Widget loginField(String label, IconData icon, bool secured, TextInputType type, TextEditingController controller, Key key,appProvider appProviderInstance) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -431,36 +407,6 @@ Widget DrawButtonOnHomePage({Function onTapFun, String text}){
   );
 }
 
-void removeOldMeals(String s, appProvider appProviderInstance,dynamic widget,Function function) {
-  List<meal> meals;
-  if (s == "Launch".tr) {
-    meals = appProviderInstance.chossenlaunchmeals;
-  } else if (s == "BreakFast".tr) {
-    meals = appProviderInstance.choosenbreakfastmeals;
-  } else if (s == "Dinner".tr) {
-    meals = appProviderInstance.choosendinnermeals;
-  } else if(s=="Snacks".tr){
-    meals = appProviderInstance.chossensnacks;
-  }
-  if (widget.currentEvents[widget.calendarController.selectedDay] != null ) {
-    if (widget.selectedEvents.length < 3) {
-      if(widget.mealsmap[widget.calendarController.selectedDay].containsKey(s)){
-        widget.currentEvents[widget.calendarController.selectedDay] = [meals];
-      }
-      else{
-        widget.currentEvents[widget.calendarController.selectedDay].add(meals);
-      }
-    }
-  } else {
-    widget.currentEvents[widget.calendarController.selectedDay] = [meals];
-  }
-  (){
-    function();
-  };
-  appProviderInstance.updateCurrentEvents(widget.currentEvents);
-  appProviderInstance.updateSelectedEvents(widget.selectedEvents);
-}
-
 Widget headLineItem({String title, Function onTap}) {
 
   return  GestureDetector(
@@ -487,42 +433,6 @@ Widget headLineItem({String title, Function onTap}) {
   );
 }
 
-void getmealsfromevent(DateTime dayy, appProvider appProviderInstance) {
-  if (appProviderInstance.currentEvents.value[dayy] == null) {
-    appProviderInstance.resetmeals();
-  }
-  else {
-    for (int i = 0; i < appProviderInstance.currentEvents.value[dayy].length; i++) {
-      if (appProviderInstance.currentEvents.value[dayy][i].length > 0) {
-        if (appProviderInstance.currentEvents.value[dayy][i][0].mealcategory == Categories.Launch) {
-          appProviderInstance.chossenlaunchmeals = appProviderInstance.currentEvents.value[dayy][i];
-        } else if (appProviderInstance.currentEvents.value[dayy][i][0].mealcategory == Categories.Breakfast) {
-          appProviderInstance.choosenbreakfastmeals = appProviderInstance.currentEvents.value[dayy][i];
-        } else if (appProviderInstance.currentEvents.value[dayy][i][0].mealcategory == Categories.Dinner) {
-          appProviderInstance.choosendinnermeals =appProviderInstance.currentEvents.value[dayy][i];
-        } else if (appProviderInstance.currentEvents.value[dayy][i][0].mealcategory == Categories.Snacks) {
-          appProviderInstance.chossensnacks =appProviderInstance.currentEvents.value[dayy][i];
-        }
-      }
-    }
-  }
-}
-
-String getDays(appProvider approvider,Collection currentcollection){
-  String days ="";
-   currentcollection.dayss.dayoff.forEach((element) {
-    days+=approvider.dayData[element].tr+" / ";
-  });
-  return days;
-
-}
-
-TextStyle textStyle =TextStyle(
-    color: Colors.grey,
-    fontSize: 15.0,
-    fontWeight: FontWeight.bold
-);
-
 Widget buildTypeOfMealIfExistInCollection(appProvider appProvider_Instance,String mealType,bool isMealExist) {
   return isMealExist?Text(mealType.tr,
     style: TextStyle(
@@ -533,7 +443,7 @@ Widget buildTypeOfMealIfExistInCollection(appProvider appProvider_Instance,Strin
   ):Container();
 }
 
-InkWell buildCollectionItem(int index, BuildContext context,appProvider appProviderInstance) {
+Widget buildCollectionItem(int index, BuildContext context,appProvider appProviderInstance) {
   return InkWell(
     onTap: () {
       appProviderInstance.updateCurrentCollection(appProviderInstance.cuurentprogram.collections[index]);
@@ -664,7 +574,7 @@ Widget getTextOfData(bool isMealExistInProgram,String text){
   ):Container();
 }
 
-Card buildProgramItem(BuildContext context, int index, Orientation orientation,appProvider appProviderInstance) {
+Widget buildProgramItem(BuildContext context, int index, Orientation orientation,appProvider appProviderInstance) {
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
     child: GestureDetector(
@@ -790,7 +700,7 @@ PopupMenuItem<String> buildPopupMenuItem(String text) {
       value: text);
 }
 
-InkWell buildButtonInSummaryPage(appProvider appProvider_Instance, BuildContext context,dynamic nextPage,String buttonText) {
+Widget buildButtonInSummaryPage(appProvider appProvider_Instance, BuildContext context,dynamic nextPage,String buttonText) {
   return InkWell(
     onTap: () {
       appProvider_Instance.startdate=DateTime.now().add(new Duration(days:2));

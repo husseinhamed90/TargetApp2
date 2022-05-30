@@ -69,10 +69,10 @@ class _DetailsState extends State<programdetails> {
                   scrollDirection: Axis.vertical,
                   children: [
                     item('Collection Name'.tr, widget.currentcollection.title,iscouponapplied,widget.currentcollection),
-                    item('Target Name'.tr, widget.currentprogram,iscouponapplied,widget.currentcollection),
+                    item('Target Name'.tr, appProviderInstance.cuurentprogram.name,iscouponapplied,widget.currentcollection),
                     item('Collection Days'.tr, "${widget.currentcollection.dayss.numodfays}",iscouponapplied,widget.currentcollection),
-                    item('Off Days'.tr, "${getDays(appProviderInstance,widget.currentcollection)}",iscouponapplied,widget.currentcollection),
-                    //item('Collection Meals', 'Breakfast, Launch, Dinner & Snacks'),
+                    item('Off Days'.tr, "${appProviderInstance.getDays(appProviderInstance)}",iscouponapplied,widget.currentcollection),
+
                     ListTile(
                       title: Text(
                         "Collection Meals".tr,

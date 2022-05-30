@@ -303,7 +303,7 @@ class _createnewaccountState extends State<createnewaccount> {
                         onPressed: () {
                           if (!_formKey.currentState.validate()) {
                             // ignore: deprecated_member_use
-                            Scaffold.of(context).showSnackBar(snack('fields Required!'.tr));
+                            Scaffold.of(context).showSnackBar(buildSnackBar('fields Required!'.tr));
                           } else {
                             appProviderInstance.updateUser();
                             if (appProviderInstance.currentcollection != null) {

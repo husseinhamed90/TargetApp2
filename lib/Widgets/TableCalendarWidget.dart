@@ -93,7 +93,7 @@ class _TableCalendarWidgetState extends State<TableCalendarWidget> {
                     appProviderInstance.changeStateOfDateTimeValue(dayy);
                     appProviderInstance.updateSelectedEvents(events);
                    });
-                  getmealsfromevent(dayy, appProviderInstance);
+                  appProviderInstance.getMealsFromEvent(dayy, appProviderInstance);
                   if (value[dayy] == null) {
 
                   }
