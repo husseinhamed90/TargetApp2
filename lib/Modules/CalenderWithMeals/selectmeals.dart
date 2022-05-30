@@ -1,18 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:get/get.dart';
-import 'package:target/Models/Categories.dart';
 import 'package:target/Models/Collection.dart';
 import 'package:target/Models/Meal.dart';
-import 'package:target/Modules/AllMeals/ViewAllMeals.dart';
 import '../../Widgets/TableCalendarWidget.dart';
 import '../../Widgets/bottomPartInSelectMealsPage.dart';
 import 'package:target/providers/AppProvider.dart';
-import 'package:target/shared/components.dart';
-
-import '../CreateAccount/CreatenewAccount.dart';
 
 class selectmeals extends StatefulWidget {
   Collection currentcollection;
@@ -37,6 +31,7 @@ class _selectmealsState extends State<selectmeals> {
     widget.selectedEvents=appProviderInstance.selectedEvents.value;
     widget.mealsmap=appProviderInstance.mealsmap.value;
     appProviderInstance.changeStateOfDateTimeValue(null);
+    super.initState();
 
   }
   @override

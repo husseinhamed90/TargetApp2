@@ -21,8 +21,8 @@ class _mapState extends State<map> {
   double lat,lang;
   void initState (){
      appProviderInstance =Provider.of<appProvider>(context,listen: false);
-
-    getcurrentlocation();
+     super.initState();
+     getCurrentLocation();
   }
 
   @override
@@ -68,7 +68,7 @@ class _mapState extends State<map> {
                     fontWeight: FontWeight.normal),
               ),
               onPressed: () {
-                getcurrentlocation();
+                getCurrentLocation();
               },
             ),
           );
@@ -90,7 +90,7 @@ class _mapState extends State<map> {
         )
     );
   }
-  Future<Geolocator> getcurrentlocation() async{
+       getCurrentLocation() async{
         setState(() {
           lat=null;
           lang=null;

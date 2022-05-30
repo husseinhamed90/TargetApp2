@@ -1,8 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:target/Modules/Packages/Packages.dart';
 import 'package:target/providers/AppProvider.dart';
 import 'package:target/shared/ChangeLang.dart';

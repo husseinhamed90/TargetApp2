@@ -1,13 +1,7 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location_permissions/location_permissions.dart';
 import 'package:provider/provider.dart';
-import 'package:target/Models/User.dart';
 import 'package:target/Modules/Map/map.dart';
 import 'package:target/Modules/Packages/Packages.dart';
 import 'package:target/Modules/Summary/Summry.dart';
@@ -292,6 +286,7 @@ class _createnewaccountState extends State<createnewaccount> {
                               ),
                             ),
                       ),
+                      // ignore: deprecated_member_use
                       FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)),
@@ -307,6 +302,7 @@ class _createnewaccountState extends State<createnewaccount> {
                         ),
                         onPressed: () {
                           if (!_formKey.currentState.validate()) {
+                            // ignore: deprecated_member_use
                             Scaffold.of(context).showSnackBar(snack('fields Required!'.tr));
                           } else {
                             appProviderInstance.updateUser();

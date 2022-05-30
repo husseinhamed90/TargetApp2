@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:target/Models/Collection.dart';
-import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
 import 'package:target/Modules/CreateAccount/CreatenewAccount.dart';
-import 'package:target/Modules/Summary/Summry.dart';
 import 'package:target/providers/AppProvider.dart';
 import 'package:target/shared/components.dart';
 
@@ -139,7 +137,7 @@ class _DetailsState extends State<programdetails> {
                               onTap: () {
                                 if(promoController.text!=""){
 
-                                  if(appProviderInstance.iscouponvalid(promoController.text)){
+                                  if(appProviderInstance.isCouponValid(promoController.text)){
                                     setState(() {
                                       iscouponapplied=true;
                                       newprice=widget.currentcollection.price*((100-50)/100);

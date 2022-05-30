@@ -376,10 +376,11 @@ class appProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  bool iscouponvalid(String coupon){
+  bool isCouponValid(String coupon){
     if(coupon=="50A"){
       return true;
     }
+    return false;
   }
 
   bool ismealexist(meal newmeal,List<meal>list){
@@ -471,7 +472,6 @@ class appProvider extends ChangeNotifier{
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
      return (prefs.getInt('remain') ?? 0);
-    notifyListeners();
   }
 
   void setremaintopref()async{

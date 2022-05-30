@@ -4,13 +4,11 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:target/Models/Categories.dart';
 import 'package:target/Models/Collection.dart';
 import 'package:target/Models/Meal.dart';
-import 'package:target/Modules/AllMeals/ViewAllMeals.dart';
 import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
 import 'package:target/Modules/ProgramDetails/programdetails.dart';
 import 'package:target/providers/AppProvider.dart';
-import '../Widgets/bottomPartInSelectMealsPage.dart';
 
-snack(String content) {
+Widget snack(String content) {
   return SnackBar(
       backgroundColor: Colors.red,
       duration: Duration(seconds: 3),
@@ -21,7 +19,8 @@ snack(String content) {
             topRight: Radius.circular(15.0),
           )));
 }
-Widget item(String title, String subtitle,bool iscouponapplied,Collection currentcollection) {
+
+Widget item(String title, String subtitle,bool isCouponApplied,Collection currentCollection) {
   if(title=="Collection Fee : "){
     return ListTile(
       title: AutoSizeText(
@@ -45,12 +44,12 @@ Widget item(String title, String subtitle,bool iscouponapplied,Collection curren
 
                 ),
               ),
-              (iscouponapplied)?Positioned(right: 0,top: 7,child: Container(width: 70,height: 2,color: Colors.white,)):Container()
+              (isCouponApplied)?Positioned(right: 0,top: 7,child: Container(width: 70,height: 2,color: Colors.white,)):Container()
             ],
           ),
           SizedBox(width: 10,),
-          (iscouponapplied)?AutoSizeText(
-            "${currentcollection.price*((100-50)/100)} KWD",
+          (isCouponApplied)?AutoSizeText(
+            "${currentCollection.price*((100-50)/100)} KWD",
             style: TextStyle(
               color: Colors.white70,
               fontSize: 18.0,
@@ -83,6 +82,7 @@ Widget item(String title, String subtitle,bool iscouponapplied,Collection curren
     );
   }
 }
+
 Widget buildField(String label, IconData icon, TextInputType type, TextEditingController controller, Key key,double width,appProvider appProviderInstance) {
 
   return Padding(
@@ -139,6 +139,7 @@ Widget buildField(String label, IconData icon, TextInputType type, TextEditingCo
     ),
   );
 }
+
 Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double hight, List<meal> meals ,String menuname,double width,bool chekcedvalue,String addedlist,List<meal>choosedmeals,Function setStateFunction,bool isVertical){
   List<meal> mealss =meals;
   if ((chekcedvalue)) {
@@ -146,8 +147,8 @@ Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double hi
     children: [
       headLineItem(title: menuname,onTap: setStateFunction),
       (isVertical)? Expanded(
-        child: buildList(hight, mealss, appProviderInstance, widget, choosedmeals, addedlist, setStateFunction, isVertical),
-      ):buildList(hight, mealss, appProviderInstance, widget, choosedmeals, addedlist, setStateFunction, isVertical),
+        child: buildList(hight, mealss, appProviderInstance, widget, choosedmeals, addedlist, setStateFunction, isVertical,widget.noteController),
+      ):buildList(hight, mealss, appProviderInstance, widget, choosedmeals, addedlist, setStateFunction, isVertical,widget.noteController),
     ],
   );
   } else {
@@ -155,198 +156,207 @@ Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double hi
   }
 }
 
-Container buildList(double hight, List<meal> mealss, appProvider appProviderInstance, widget, List<meal> choosedmeals, String addedlist, Function setStateFunction, bool isVertical) {
+Container buildList(double height, List<meal> newList, appProvider appProviderInstance, widget, List<meal> choosedmeals, String addedlist, Function setStateFunction, bool isVertical,TextEditingController noteController) {
   return Container(
         color: Color(0xfff5f5f5),
-        height: hight,
+        height: height,
         child: ListView.builder(
           itemBuilder: (context, index) {
-            return  Card(
-              margin: EdgeInsets.all(10.0),
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                width: MediaQuery.of(context).size.width/1.5,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 170,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        image: DecorationImage(
-                            image: NetworkImage(mealss[index].url),
-                            fit : BoxFit.fill
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      child: ListTile(
-                        title: AutoSizeText(
-                          mealss[index].name,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        subtitle: AutoSizeText(
-                          mealss[index].description,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        trailing:(appProviderInstance.ismealexist(mealss[index],choosedmeals))?(mealss[index].isNoteExist==false) ?
-                        TextButton(
-                          child: Text("Add Note".tr),
-                          onPressed: () {
-                            showModalBottomSheet(
-                                context: context,
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))),
-                                builder: (BuildContext context){
-                                  return Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      //   scrollDirection: Axis.vertical,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topCenter,
-                                          child: AutoSizeText(
-                                            'Add Note ?'.tr,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: TextField(
-                                              decoration: InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(15.0),
-                                                      borderSide: BorderSide(color: Colors.black, width: 0.5)
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(15.0),
-                                                      borderSide: BorderSide(color: Colors.black, width: 0.5)
-                                                  ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(15.0),
-                                                      borderSide: BorderSide(color: Colors.black, width: 0.5)
-                                                  ),
-                                                  labelText: 'Add your Notes'.tr
-                                              ),
-                                              textInputAction: TextInputAction.done,
-                                              keyboardType: TextInputType.multiline,
-                                              maxLength: 125,
-                                              controller: widget.noteController
-                                          ),
-                                        ),
-                                        FlatButton(
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                            child: AutoSizeText(
-                                              "Confirm".tr,
-                                              style: TextStyle(color: Color(0xff36a9e0), fontSize: 20.0, fontWeight: FontWeight.bold),
-                                            ),
-                                            color: Colors.white,
-                                            onPressed: () {
-                                              mealss[index].isNoteExist=true;
-                                              appProviderInstance.changeStateOfEyeIcon(appProviderInstance.isConfirmButtonClicked);
-                                              Navigator.pop(context);
-                                            }
-                                        ),
-
-                                      ],
-                                    ),
-                                  );
-                                }
-                            );
-                          },
-                        ):
-                        TextButton(
-                          child: Text("Remove Note".tr),
-                          onPressed: () {
-                            mealss[index].isNoteExist=false;
-                            appProviderInstance.resetIsisConfirmButtonClickedValue();
-                          },
-                        )
-                        :SizedBox(),
-                      ),
-                    ),
-                     Spacer(),
-                    if (!appProviderInstance.ismealexist(mealss[index],choosedmeals))
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,color: Colors.black,size: 30,),
-                        onPressed: () {
-                          appProviderInstance.addtolist(mealss[index],addedlist,widget.calendarController.selectedDay);
-                          mealss = appProviderInstance.meals;
-                          removeOldMeals(addedlist, appProviderInstance,widget,setStateFunction);
-                          if(widget.mealsmap[widget.calendarController.selectedDay]!=null){
-
-                            if(widget.mealsmap[widget.calendarController.selectedDay].containsKey(addedlist)){
-                              widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
-                            }
-                            else{
-                              widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
-                            }
-                          }
-                          else{
-                            widget.mealsmap[widget.calendarController.selectedDay]={addedlist:choosedmeals};
-                          }
-                          List<List<meal>> meals=[];
-                          widget.mealsmap[widget.calendarController.selectedDay].forEach((key, value) {
-                            meals.add(value);
-                          });
-                          widget.currentEvents[widget.calendarController.selectedDay]=meals;
-                          appProviderInstance.updateCurrentEvents(widget.currentEvents);
-                          appProviderInstance.updateSelectedEvents(widget.selectedEvents);
-                          appProviderInstance.updateMealsMap(widget.mealsmap);
-
-                        },
-                      )
-                    else
-                      IconButton(
-                        icon: Icon(Icons.shopping_cart_outlined,color: Colors.black,size: 30,),
-                        onPressed: () {
-                          appProviderInstance.removefrommeals(mealss[index],choosedmeals,widget.calendarController.selectedDay,addedlist);
-                          mealss = appProviderInstance.meals;
-                          List<List<meal>> meals=[];
-                          widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
-                          if( widget.mealsmap[widget.calendarController.selectedDay][addedlist].length==0){
-
-                            widget.mealsmap[widget.calendarController.selectedDay].remove(addedlist);
-                          }
-
-                          widget.mealsmap[widget.calendarController.selectedDay].forEach((key, value) {
-                            meals.add(value);
-                          });
-                          widget.currentEvents[widget.calendarController.selectedDay]=meals;
-                          appProviderInstance.updateCurrentEvents(widget.currentEvents);
-                          appProviderInstance.updateSelectedEvents(widget.selectedEvents);
-                          appProviderInstance.updateMealsMap(widget.mealsmap);
-                        },
-                      )
-                  ],
-                ),
-              ),
-            );
+            return  buildMealItem(context, appProviderInstance, newList[index], widget, choosedmeals, addedlist, setStateFunction, newList,noteController);
           },
-          itemCount: mealss.length,
+          itemCount: newList.length,
           scrollDirection: isVertical?Axis.vertical:Axis.horizontal,
         ),
       );
+}
+
+Widget buildMealItem(BuildContext context,appProvider appProviderInstance,meal currentMeal,dynamic widget,List<meal> choosedmeals, String addedlist, Function setStateFunction,List<meal> mealss,TextEditingController noteController){
+  return Card(
+    margin: EdgeInsets.all(10.0),
+    elevation: 5.0,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+    child: Container(
+      height: 300,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      width: MediaQuery.of(context).size.width/1.5,
+      child: Column(
+        children: [
+          buildImageFromUrl(currentMeal.url),
+          buildMealInfo(currentMeal, appProviderInstance, choosedmeals, context, noteController),
+          Spacer(),
+          editOrderButtons(appProviderInstance, currentMeal, widget, addedlist, choosedmeals, mealss, setStateFunction)
+        ],
+      ),
+    ),
+  );
+}
+
+Widget editOrderButtons(appProvider appProviderInstance,meal currentMeal,dynamic widget,String addedlist,List<meal>choosedmeals,List<meal>mealss,Function setStateFunction){
+
+  return IconButton(
+    icon: Icon(!appProviderInstance.ismealexist(currentMeal,choosedmeals)?Icons.add:Icons.shopping_cart_outlined,
+      color: Colors.black,size: 30,),
+      onPressed: () {
+        if (!appProviderInstance.ismealexist(currentMeal,choosedmeals)){
+          addMealToOrder(appProviderInstance, currentMeal, addedlist, widget, mealss, setStateFunction, choosedmeals);
+        }
+        else{
+          removeMealFromOrder(appProviderInstance, currentMeal, choosedmeals, widget, addedlist, mealss);
+        }
+        updateAppProvider(widget, appProviderInstance);
+      },
+  );
+}
+
+void removeMealFromOrder(appProvider appProviderInstance, meal currentMeal, List<meal> choosedmeals, widget, String addedlist, List<meal> mealss) {
+  appProviderInstance.removefrommeals(currentMeal,choosedmeals,widget.calendarController.selectedDay,addedlist);
+  mealss = appProviderInstance.meals;
+  widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
+  if( widget.mealsmap[widget.calendarController.selectedDay][addedlist].length==0){
+    widget.mealsmap[widget.calendarController.selectedDay].remove(addedlist);
+  }
+}
+
+void addMealToOrder(appProvider appProviderInstance, meal currentMeal, String addedlist, widget, List<meal> mealss, Function setStateFunction, List<meal> choosedmeals) {
+  appProviderInstance.addtolist(currentMeal,addedlist,widget.calendarController.selectedDay);
+  mealss = appProviderInstance.meals;
+  removeOldMeals(addedlist, appProviderInstance,widget,setStateFunction);
+  if(widget.mealsmap[widget.calendarController.selectedDay]!=null){
+    widget.mealsmap[widget.calendarController.selectedDay][addedlist]=choosedmeals;
+  }
+  else{
+    widget.mealsmap[widget.calendarController.selectedDay]={addedlist:choosedmeals};
+  }
+}
+
+void updateAppProvider(widget, appProvider appProviderInstance) {
+  List<List<meal>> meals=[];
+  widget.mealsmap[widget.calendarController.selectedDay].forEach((key, value) {
+    meals.add(value);
+  });
+  widget.currentEvents[widget.calendarController.selectedDay]=meals;
+  appProviderInstance.updateCurrentEvents(widget.currentEvents);
+  appProviderInstance.updateSelectedEvents(widget.selectedEvents);
+  appProviderInstance.updateMealsMap(widget.mealsmap);
+}
+
+Widget buildImageFromUrl(String url){
+  return Container(
+    height: 170,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      image: DecorationImage(
+          image: NetworkImage(url),
+          fit : BoxFit.fill
+      ),
+    ),
+  );
+}
+Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal> choosedmeals,BuildContext context,TextEditingController noteController){
+  return  Container(
+    height: 50,
+    child: ListTile(
+      title: AutoSizeText(
+        currentMeal.name,
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: 25,
+            fontWeight: FontWeight.bold
+        ),
+      ),
+      subtitle: AutoSizeText(
+        currentMeal.description,
+        style: TextStyle(
+            color: Colors.grey,
+            fontSize: 15,
+            fontWeight: FontWeight.bold
+        ),
+      ),
+      trailing:(appProviderInstance.ismealexist(currentMeal,choosedmeals))?(currentMeal.isNoteExist==false) ?
+      TextButton(
+        child: Text("Add Note".tr),
+        onPressed: () {
+          customShowBottomSheet(context, appProviderInstance, currentMeal, noteController);
+        },
+      ):
+      TextButton(
+        child: Text("Remove Note".tr),
+        onPressed: () {
+          currentMeal.isNoteExist=false;
+          appProviderInstance.resetIsisConfirmButtonClickedValue();
+        },
+      )
+          :SizedBox(),
+    ),
+  );
+}
+Future<dynamic> customShowBottomSheet(BuildContext context,appProvider appProviderInstance,meal currentMeal,TextEditingController noteController){
+  return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))),
+      builder: (BuildContext context){
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: AutoSizeText(
+                  'Add Note ?'.tr,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(color: Colors.black, width: 0.5)
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(color: Colors.black, width: 0.5)
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(color: Colors.black, width: 0.5)
+                        ),
+                        labelText: 'Add your Notes'.tr
+                    ),
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.multiline,
+                    maxLength: 125,
+                    controller: noteController
+                ),
+              ),
+              FlatButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                  child: AutoSizeText(
+                    "Confirm".tr,
+                    style: TextStyle(color: Color(0xff36a9e0), fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                  color: Colors.white,
+                  onPressed: () {
+                    currentMeal.isNoteExist=true;
+                    appProviderInstance.changeStateOfEyeIcon(appProviderInstance.isConfirmButtonClicked);
+                    Navigator.pop(context);
+                  }
+              ),
+            ],
+          ),
+        );
+      }
+  );
 }
 Widget loginField(String label, IconData icon, bool secured, TextInputType type, TextEditingController controller, Key key,appProvider appProviderInstance) {
   return Padding(
@@ -476,6 +486,7 @@ Widget headLineItem({String title, Function onTap}) {
     ),
   );
 }
+
 void getmealsfromevent(DateTime dayy, appProvider appProviderInstance) {
   if (appProviderInstance.currentEvents.value[dayy] == null) {
     appProviderInstance.resetmeals();
@@ -497,7 +508,6 @@ void getmealsfromevent(DateTime dayy, appProvider appProviderInstance) {
   }
 }
 
-
 String getDays(appProvider approvider,Collection currentcollection){
   String days ="";
    currentcollection.dayss.dayoff.forEach((element) {
@@ -506,6 +516,7 @@ String getDays(appProvider approvider,Collection currentcollection){
   return days;
 
 }
+
 TextStyle textStyle =TextStyle(
     color: Colors.grey,
     fontSize: 15.0,
@@ -643,7 +654,6 @@ InkWell buildCollectionItem(int index, BuildContext context,appProvider appProvi
   );
 }
 
-
 Widget getTextOfData(bool isMealExistInProgram,String text){
   return isMealExistInProgram?Text(text,
     style: TextStyle(
@@ -653,6 +663,7 @@ Widget getTextOfData(bool isMealExistInProgram,String text){
     ),
   ):Container();
 }
+
 Card buildProgramItem(BuildContext context, int index, Orientation orientation,appProvider appProviderInstance) {
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -713,6 +724,7 @@ Card buildProgramItem(BuildContext context, int index, Orientation orientation,a
     ),
   );
 }
+
 Widget buildButtonInRemainingDaysPage(BuildContext context,dynamic nextPage,String buttonText){
   return InkWell(
     onTap: () {
@@ -777,7 +789,6 @@ PopupMenuItem<String> buildPopupMenuItem(String text) {
       ),
       value: text);
 }
-
 
 InkWell buildButtonInSummaryPage(appProvider appProvider_Instance, BuildContext context,dynamic nextPage,String buttonText) {
   return InkWell(

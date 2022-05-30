@@ -3,11 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:target/Widgets/ProgramItem.dart';
 import '../../Widgets/CollectionList.dart';
-import 'package:target/Models/Collection.dart';
-import 'package:target/Models/Program.dart';
-import 'package:target/Modules/ProgramDetails/programdetails.dart';
 import 'package:target/providers/AppProvider.dart';
-import 'package:target/shared/components.dart';
 
 class Packages extends StatefulWidget {
   @override

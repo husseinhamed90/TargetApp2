@@ -1,12 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:target/Models/Categories.dart';
 import 'package:target/shared/components.dart';
-
 import '../../providers/AppProvider.dart';
 import '../../Models/Collection.dart';
 import '../../Models/Meal.dart';
@@ -21,10 +17,10 @@ class Result extends StatefulWidget {
   CalendarController calendarController;
   Map<DateTime, List<List<meal>>> currentEvents = {};
   Map<DateTime, Map<String,List<meal>>> mealsmap = {};
-  List<dynamic> _selectedEvents = [];
+  List<dynamic> selectedEvents = [];
   List<meal>listOfMeals,lastChosenMeals;
   final TextEditingController noteController = TextEditingController();
-  Result(this.title,this.currentcollection,this.calendarController,this.currentEvents,this._selectedEvents,this.mealsmap,this.listOfMeals,this.lastChosenMeals);
+  Result(this.title,this.currentcollection,this.calendarController,this.currentEvents,this.selectedEvents,this.mealsmap,this.listOfMeals,this.lastChosenMeals);
 
   @override
   _ResultState createState() => _ResultState();

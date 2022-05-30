@@ -1,5 +1,4 @@
 // @dart=2.9
-import 'package:get/get.dart';
 class User{
   //int id=0;
   String name="";

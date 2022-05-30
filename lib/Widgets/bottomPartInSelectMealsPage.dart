@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +33,6 @@ class bottomPart_State extends State<BottomPart> {
   @override
   Widget build(BuildContext context) {
     double hight=310;
-    print("bottomPart");
     appProviderInstance = Provider.of<appProvider>(context);
     double width=MediaQuery.of(context).size.width*0.2;
 
@@ -44,7 +42,6 @@ class bottomPart_State extends State<BottomPart> {
 
     return Container(
         height: constraints.maxHeight*0.7-MediaQuery.of(context).size.height*0.1-(constraints.maxHeight*0.5)/9*3,
-        //height:MediaQuery.of(context).size.height*0.7,
         color: Color(0xfff5f5f5),
         child: ((appProviderInstance.dateTime != null)
             ? ListView(
