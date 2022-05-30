@@ -146,15 +146,15 @@ Widget buildField(String label, IconData icon, TextInputType type, TextEditingCo
   );
 }
 
-Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double hight, List<meal> meals ,String menuname,double width,bool chekcedvalue,String addedlist,List<meal>choosedmeals,Function setStateFunction,bool isVertical){
+Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double height, List<meal> meals ,String menuName,double width,bool checkedValue,String nameOfAddedList,List<meal>chosenMeals,Function setStateFunction,bool isVertical){
   List<meal> mealss =meals;
-  if ((chekcedvalue)) {
+  if ((checkedValue)) {
     return Column(
     children: [
-      headLineItem(title: menuname,onTap: setStateFunction),
+      headLineItem(title: menuName,onTap: setStateFunction),
       (isVertical)? Expanded(
-        child: buildList(hight, mealss, appProviderInstance, widget, choosedmeals, addedlist, setStateFunction, isVertical,widget.noteController),
-      ):buildList(hight, mealss, appProviderInstance, widget, choosedmeals, addedlist, setStateFunction, isVertical,widget.noteController),
+        child: buildList(height, mealss, appProviderInstance, widget, chosenMeals, nameOfAddedList, setStateFunction, isVertical,widget.noteController),
+      ):buildList(height, mealss, appProviderInstance, widget, chosenMeals, nameOfAddedList, setStateFunction, isVertical,widget.noteController),
     ],
   );
   } else {
@@ -162,13 +162,13 @@ Widget buildListOfMeals(dynamic widget,appProvider appProviderInstance,double hi
   }
 }
 
-Widget buildList(double height, List<meal> newList, appProvider appProviderInstance, widget, List<meal> choosedmeals, String addedlist, Function setStateFunction, bool isVertical,TextEditingController noteController) {
+Widget buildList(double height, List<meal> newList, appProvider appProviderInstance, widget, List<meal> chosenMeals, String nameOfAddedList, Function setStateFunction, bool isVertical,TextEditingController noteController) {
   return Container(
         color: Color(0xfff5f5f5),
         height: height,
         child: ListView.builder(
           itemBuilder: (context, index) {
-            return  buildMealItem(context, appProviderInstance, newList[index], widget, choosedmeals, addedlist, setStateFunction, newList,noteController);
+            return  buildMealItem(context, appProviderInstance, newList[index], widget, chosenMeals, nameOfAddedList, setStateFunction, newList,noteController);
           },
           itemCount: newList.length,
           scrollDirection: isVertical?Axis.vertical:Axis.horizontal,
@@ -176,7 +176,7 @@ Widget buildList(double height, List<meal> newList, appProvider appProviderInsta
       );
 }
 
-Widget buildMealItem(BuildContext context,appProvider appProviderInstance,meal currentMeal,dynamic widget,List<meal> choosedmeals, String addedlist, Function setStateFunction,List<meal> mealss,TextEditingController noteController){
+Widget buildMealItem(BuildContext context,appProvider appProviderInstance,meal currentMeal,dynamic widget,List<meal> chosenMeals, String nameOfAddedList, Function setStateFunction,List<meal> newMeals,TextEditingController noteController){
   return Card(
     margin: EdgeInsets.all(10.0),
     elevation: 5.0,
@@ -191,25 +191,25 @@ Widget buildMealItem(BuildContext context,appProvider appProviderInstance,meal c
       child: Column(
         children: [
           buildImageFromUrl(currentMeal.url),
-          buildMealInfo(currentMeal, appProviderInstance, choosedmeals, context, noteController),
+          buildMealInfo(currentMeal, appProviderInstance, chosenMeals, context, noteController),
           Spacer(),
-          editOrderButtons(appProviderInstance, currentMeal, widget, addedlist, choosedmeals, mealss, setStateFunction)
+          editOrderButtons(appProviderInstance, currentMeal, widget, nameOfAddedList, chosenMeals, newMeals, setStateFunction)
         ],
       ),
     ),
   );
 }
 
-Widget editOrderButtons(appProvider appProviderInstance,meal currentMeal,dynamic widget,String addedlist,List<meal>choosedmeals,List<meal>mealss,Function setStateFunction){
+Widget editOrderButtons(appProvider appProviderInstance,meal currentMeal,dynamic widget,String nameOfAddedList,List<meal>chosenMeals,List<meal>newMeals,Function setStateFunction){
   return IconButton(
-    icon: Icon(!appProviderInstance.ismealexist(currentMeal,choosedmeals)?Icons.add:Icons.shopping_cart_outlined,
+    icon: Icon(!appProviderInstance.ismealexist(currentMeal,chosenMeals)?Icons.add:Icons.shopping_cart_outlined,
       color: Colors.black,size: 30,),
       onPressed: () {
-        if (!appProviderInstance.ismealexist(currentMeal,choosedmeals)){
-          appProviderInstance.addMealToOrder(appProviderInstance, currentMeal, addedlist, widget, mealss, setStateFunction, choosedmeals);
+        if (!appProviderInstance.ismealexist(currentMeal,chosenMeals)){
+          appProviderInstance.addMealToOrder(appProviderInstance, currentMeal, nameOfAddedList, widget, newMeals, setStateFunction, chosenMeals);
         }
         else{
-          appProviderInstance.removeMealFromOrder(appProviderInstance, currentMeal, choosedmeals, widget, addedlist, mealss);
+          appProviderInstance.removeMealFromOrder(appProviderInstance, currentMeal, chosenMeals, widget, nameOfAddedList, newMeals);
         }
         appProviderInstance.updateAppProvider(widget);
       },
@@ -229,7 +229,7 @@ Widget buildImageFromUrl(String url){
   );
 }
 
-Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal> choosedmeals,BuildContext context,TextEditingController noteController){
+Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal> chosenMeals,BuildContext context,TextEditingController noteController){
   return  Container(
     height: 50,
     child: ListTile(
@@ -249,7 +249,7 @@ Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal>
             fontWeight: FontWeight.bold
         ),
       ),
-      trailing:(appProviderInstance.ismealexist(currentMeal,choosedmeals))?(currentMeal.isNoteExist==false) ?
+      trailing:(appProviderInstance.ismealexist(currentMeal,chosenMeals))?(currentMeal.isNoteExist==false) ?
       TextButton(
         child: Text("Add Note".tr),
         onPressed: () {
