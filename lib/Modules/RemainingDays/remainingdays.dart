@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
 import 'package:target/Modules/CreateAccount/CreatenewAccount.dart';
-import 'package:target/Modules/editprofile/editprofileinfo.dart';
+import 'package:target/Widgets/buildButtonInRemainingDaysPage.dart';
 import 'package:target/providers/AppProvider.dart';
 
 class remainingdays extends StatefulWidget {
@@ -38,9 +38,6 @@ class _remainingdaysState extends State<remainingdays> {
                 )
             ),
             child: Center(
-              // color: Colors.white,
-              // height: constraints.maxHeight,
-              //width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
                   Container(
@@ -80,50 +77,9 @@ class _remainingdaysState extends State<remainingdays> {
                     //height: constraints.maxHeight * 0.2,
                     child: Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => selectmeals(x.currentcollection),));
-                          },
-                          child: Container(
-
-                            height: 40,
-                            width: MediaQuery.of(context).size.width*0.5,
-                            decoration: BoxDecoration(
-                                color: Color(0xff36a9e0),
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: Center(
-                              child: AutoSizeText(
-                                "Edit Meals".tr,
-                                style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
+                        ButtonInRemainingDaysPage( selectmeals(x.currentcollection),"Edit Meals"),
                         SizedBox(height: 10,),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount(),));
-                          },
-                          child: Container(
-
-                            height: 40,
-                            width: MediaQuery.of(context).size.width*0.5,
-                            decoration: BoxDecoration(
-                                color: Color(0xff36a9e0),
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: AutoSizeText(
-                                  "Edit Account".tr,
-                                  style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        ButtonInRemainingDaysPage(createnewaccount(),"Edit Account")
 
                       ],
                     ),

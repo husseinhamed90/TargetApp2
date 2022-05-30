@@ -77,17 +77,65 @@ class appProvider extends ChangeNotifier{
 
   String selectedArea = 'Select Area'.tr;
 
-  Map<DateTime, List<List<meal>>> events={};
-  Map<DateTime, Map<String,List<meal>>> mealsmap = {};
-  List<dynamic> selectedEvents=[];
+
+  ValueNotifier<Map<DateTime, Map<String,List<meal>>>> mealsmap = ValueNotifier({});
+  //List<dynamic> selectedEvents=[];
   List<city>cities=[];
   User user;
   ValueNotifier<String> userAddressName=ValueNotifier("");
   ValueNotifier<bool> pressed=ValueNotifier(true);
+  ValueNotifier<Map<DateTime, List<List<meal>>>>currentEvents =ValueNotifier({});
+
+  ValueNotifier<List<dynamic> >selectedEvents =ValueNotifier([]);
+
+
   ValueNotifier<bool> OnConfirmpressed=ValueNotifier(true);
   ValueNotifier<bool> isPassVisibleLoginPage=ValueNotifier(true);
+  ValueNotifier<bool> isConfirmButtonClicked=ValueNotifier(false);
+
+  bool isHoliday=false;
   void changeStateOfEyeIcon(ValueNotifier<bool> value){
+
     value.value=!value.value;
+    notifyListeners();
+  }
+
+  DateTime dateTime=null;
+  void changeStateOfDateTimeValue(DateTime newValue){
+    dateTime=newValue;
+    notifyListeners();
+  }
+
+  void changeStateOfIsHolidayValue(bool newValue){
+    isHoliday=newValue;
+    notifyListeners();
+  }
+  void updateMealsMap(Map<DateTime, Map<String,List<meal>>> newCurrentEvents){
+    mealsmap.value=newCurrentEvents;
+    notifyListeners();
+  }
+
+  void updateCurrentEvents(Map<DateTime, List<List<meal>>>newCurrentEvents){
+    currentEvents.value=newCurrentEvents;
+    notifyListeners();
+  }
+
+  void updateSelectedEvents(List<dynamic> newSelectedEvents){
+    selectedEvents.value=newSelectedEvents;
+    notifyListeners();
+  }
+
+  void resetIsisConfirmButtonClickedValue(){
+    isConfirmButtonClicked.value=false;
+    notifyListeners();
+  }
+  void updateCurrentProgram(program newValue){
+    cuurentprogram=newValue;
+    notifyListeners();
+  }
+
+  void updateCurrentCollection(Collection newValue){
+    currentcollection=newValue;
     notifyListeners();
   }
 
@@ -185,6 +233,7 @@ class appProvider extends ChangeNotifier{
       mobile.clear();
       email.clear();
       birthdate.clear();
+      dateTime=null;
       password.clear();
       confirmpassword.clear();
       day.clear();
@@ -368,12 +417,13 @@ class appProvider extends ChangeNotifier{
   }
 
   void resetmeals(){
+   // dateTime=null;
     chossenlaunchmeals=[];
     choosendinnermeals=[];
     choosenbreakfastmeals=[];
-    mealsmap={};
-    events={};
-    selectedEvents=[];
+    //mealsmap.value={};
+    //currentEvents.value={};
+    //selectedEvents.value=[];
     Chossenpackage="";
     chossensnacks=[];
     notifyListeners();
@@ -382,22 +432,22 @@ class appProvider extends ChangeNotifier{
   void addtolist(meal newmeal,String x,DateTime dateTime){
     meal newmea=meal.withdate(newmeal.id,newmeal.name,newmeal.description,newmeal.mealcategory,
         newmeal.url,dateTime);
-    if(x=="BreakFast".tr){
+    if(x=="BreakFast Meals".tr){
       allchoosenbreakfastmeals.add(newmea);
       choosenbreakfastmeals.add(newmeal);
       notifyListeners();
     }
-    else if(x=="Dinner".tr){
+    else if(x=="Dinner Meals".tr){
       choosendinnermeals.add(newmeal);
       allchoosendinnermeals.add(newmea);
       notifyListeners();
     }
-    else if(x=="Launch".tr){
+    else if(x=="Launch Meals".tr){
       allchossenlaunchmeals.add(newmea);
       chossenlaunchmeals.add(newmeal);
       notifyListeners();
     }
-    else if(x=="Snacks".tr){
+    else if(x=="Snacks Meals".tr){
       chossensnacks.add(newmeal);
       allchossensnacks.add(newmea);
       notifyListeners();

@@ -5,7 +5,6 @@ import 'package:target/Modules/RemainingDays/remainingdays.dart';
 import 'package:target/providers/AppProvider.dart';
 import 'package:target/shared/components.dart';
 
-import '../profile/profile.dart';
 class loginpage extends StatefulWidget {
   @override
   _loginpageState createState() => _loginpageState();
@@ -82,8 +81,6 @@ class _loginpageState extends State<loginpage> {
                               if(appProviderInstance.currentcollection!=null && appProviderInstance.startdate!=null && appProviderInstance.enddate!=null){
                                 appProviderInstance.startdate=DateTime.now().add(new Duration(days:2));
                                 appProviderInstance.enddate=DateTime.now().add(new Duration(days:appProviderInstance.currentcollection.dayss.numodfays+1));
-                                print(appProviderInstance.startdate);
-                                print(appProviderInstance.enddate);
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => remainingdays(),));
                               }
                             }

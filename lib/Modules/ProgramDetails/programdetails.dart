@@ -37,10 +37,7 @@ class _DetailsState extends State<programdetails> {
 
         ),),
         leading: IconButton(
-          icon: Padding(
-            padding: const EdgeInsets.only(right: 40,top: 10),
-            child: Icon(Icons.arrow_back, color:  Color(0xff36a9e0),size: 30,),
-          ),
+          icon: Icon(Icons.arrow_back, color:Color(0xff36a9e0),size: 30,),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -76,7 +73,7 @@ class _DetailsState extends State<programdetails> {
                     item('Collection Name'.tr, widget.currentcollection.title,iscouponapplied,widget.currentcollection),
                     item('Target Name'.tr, widget.currentprogram,iscouponapplied,widget.currentcollection),
                     item('Collection Days'.tr, "${widget.currentcollection.dayss.numodfays}",iscouponapplied,widget.currentcollection),
-                    item('Off Days'.tr, "${getDays(appProviderInstance)}",iscouponapplied,widget.currentcollection),
+                    item('Off Days'.tr, "${getDays(appProviderInstance,widget.currentcollection)}",iscouponapplied,widget.currentcollection),
                     //item('Collection Meals', 'Breakfast, Launch, Dinner & Snacks'),
                     ListTile(
                       title: Text(
@@ -89,35 +86,10 @@ class _DetailsState extends State<programdetails> {
                       ),
                       subtitle:  Row(
                         children: [
-
-                          widget.currentcollection.launch?Text("Launch / ".tr,
-                            style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ):Container(),
-                          widget.currentcollection.dinner?Text("Dinner / ".tr,
-                            style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ):Container(),
-                          widget.currentcollection.breakfast?Text("Break Fast / ".tr,
-                            style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ):Container(),
-                          widget.currentcollection.snacks?Text("Snacks".tr,
-                            style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ):Container(),
+                          getTextOfData(widget.currentcollection.launch,"Launch / ".tr),
+                          getTextOfData(widget.currentcollection.dinner,"Dinner / ".tr),
+                          getTextOfData(widget.currentcollection.breakfast,"Break Fast / ".tr),
+                          getTextOfData(widget.currentcollection.snacks,"Snacks / ".tr),
                         ],
                       ),
                     ),
@@ -221,8 +193,6 @@ class _DetailsState extends State<programdetails> {
                             appProviderInstance.updateCollection(widget.currentcollection);
                             appProviderInstance.startdate=DateTime.now().add(new Duration(days:2));
                             appProviderInstance.enddate=DateTime.now().add(new Duration(days:appProviderInstance.currentcollection.dayss.numodfays+1));
-                            print("sssssssssssssssss");
-                            print(appProviderInstance.user);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => createnewaccount()));
                           },
                           child: Container(
@@ -253,14 +223,6 @@ class _DetailsState extends State<programdetails> {
         ),
       ),
     );
-  }
-  String getDays(appProvider approvider){
-    String days ="";
-    widget.currentcollection.dayss.dayoff.forEach((element) {
-      days+=approvider.dayData[element].tr+" / ";
-    });
-    return days;
-
   }
 
 }

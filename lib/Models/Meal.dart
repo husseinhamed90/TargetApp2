@@ -10,6 +10,8 @@ class meal{
   Categories mealcategory=Categories.none;
   int quantity=0;
   DateTime _mealdate;
+  bool isNoteExist =false;
+  String note;
   meal(this.id, this.name, this.description, this.mealcategory,this.url);
   meal.withdate(this.id, this.name, this.description, this.mealcategory,this.url,this._mealdate);
 

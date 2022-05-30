@@ -32,10 +32,10 @@ class _mapState extends State<map> {
       bottomSheet: GestureDetector(
         child: Container(
           color: Color(0xff36a9e0),
-          height:MediaQuery.of(context).size.height*0.1,
+          height:MediaQuery.of(context).size.height*0.08,
           width: MediaQuery.of(context).size.width,
-          alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: 10.0),
+         // alignment: Alignment.bottomCenter,
+          //padding: EdgeInsets.only(bottom: 10.0),
           child: FlatButton(
 
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),

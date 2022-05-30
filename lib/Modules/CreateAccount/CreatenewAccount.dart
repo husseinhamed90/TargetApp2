@@ -43,36 +43,27 @@ class _createnewaccountState extends State<createnewaccount> {
 
   void initState() {
     appProviderInstance = Provider.of<appProvider>(context, listen: false);
-    print("from crate account");
-    print(appProviderInstance.user);
     if (appProviderInstance.user != null) {
       appProviderInstance.gender = appProviderInstance.user.gender;
       appProviderInstance.name.text = appProviderInstance.user.name;
       appProviderInstance.mobile.text = appProviderInstance.user.mobilenumber;
       appProviderInstance.email.text = appProviderInstance.user.email;
       appProviderInstance.password.text = appProviderInstance.user.password;
-      appProviderInstance.confirmpassword.text =
-          appProviderInstance.user.confirmPassword;
+      appProviderInstance.confirmpassword.text = appProviderInstance.user.confirmPassword;
       appProviderInstance.birthDate = appProviderInstance.user.birthdate;
-      appProviderInstance.block.text =
-          appProviderInstance.user.block.toString();
-      appProviderInstance.Floor.text =
-          appProviderInstance.user.Floor.toString();
-      appProviderInstance.Appointmnet.text =
-          appProviderInstance.user.Appointment.toString();
-      appProviderInstance.building.text =
-          appProviderInstance.user.Building.toString();
+      appProviderInstance.block.text = appProviderInstance.user.block.toString();
+      appProviderInstance.Floor.text = appProviderInstance.user.Floor.toString();
+      appProviderInstance.Appointmnet.text = appProviderInstance.user.Appointment.toString();
+      appProviderInstance.building.text = appProviderInstance.user.Building.toString();
       appProviderInstance.street.text = appProviderInstance.user.Street;
       appProviderInstance.selectedCity = appProviderInstance.user.city;
       appProviderInstance.selectedArea = appProviderInstance.user.area;
-      print(appProviderInstance.street.text);
     }
     else{
       Future.delayed(Duration.zero, () {
         appProviderInstance.resetTextFields();
       });
     }
-
     super.initState();
   }
   @override
@@ -94,9 +85,7 @@ class _createnewaccountState extends State<createnewaccount> {
           iconTheme: IconThemeData(color: Color(0xff36a9e0), size: 20.0),
         ),
         body: LayoutBuilder(
-          builder: (context, constraints) =>
-              Container(
-
+          builder: (context, constraints) => Container(
                 margin: EdgeInsets.all(10.0),
                 child: Form(
                   key: _formKey,
@@ -175,42 +164,10 @@ class _createnewaccountState extends State<createnewaccount> {
                               borderRadius: BorderRadius.circular(15.0)),
                           itemBuilder: (BuildContext context) {
                             return <PopupMenuEntry<String>>[
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Kuwait',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Kuwait'),
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Hawally',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Hawally'),
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Salmiya',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Salmiya'),
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Sharq',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Sharq'),
+                              buildPopupMenuItem('Kuwait'),
+                              buildPopupMenuItem('Hawally'),
+                              buildPopupMenuItem('Salmiya'),
+                              buildPopupMenuItem('Sharq'),
                             ];
                           },
                           onSelected: (String value) {
@@ -242,42 +199,10 @@ class _createnewaccountState extends State<createnewaccount> {
                               borderRadius: BorderRadius.circular(15.0)),
                           itemBuilder: (BuildContext context) {
                             return <PopupMenuEntry<String>>[
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Kuwait',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Kuwait'),
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Hawally',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Hawally'),
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Salmiya',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Salmiya'),
-                              PopupMenuItem(
-                                  child: Text(
-                                    'Sharq',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  value: 'Sharq'),
+                              buildPopupMenuItem('Kuwait'),
+                              buildPopupMenuItem('Hawally'),
+                              buildPopupMenuItem('Salmiya'),
+                              buildPopupMenuItem('Sharq'),
                             ];
                           },
                           onSelected: (String value) {
@@ -307,19 +232,12 @@ class _createnewaccountState extends State<createnewaccount> {
                               //return Flexible(child: AutoSizeText(value));
                             },
                           ),
-                          Container(
-                            width: (MediaQuery
-                                .of(context)
-                                .size
-                                .width - 50) * 0.1,
-                            child: IconButton(icon: Icon(
-                              Icons.add_location_rounded, color: Color(
-                                0xff36a9e0),), onPressed: () async {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => map()));
-                              // getcurrentlocation();
-                            }),
-                          )
+                          IconButton(icon: Icon(
+                            Icons.add_location_rounded, color: Color(
+                              0xff36a9e0),), onPressed: () async {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => map()));
+                          })
                         ],
                       ),
                       LayoutBuilder(
@@ -389,24 +307,13 @@ class _createnewaccountState extends State<createnewaccount> {
                         ),
                         onPressed: () {
                           if (!_formKey.currentState.validate()) {
-                            Scaffold.of(context)
-                                .showSnackBar(snack('fields Required!'.tr));
+                            Scaffold.of(context).showSnackBar(snack('fields Required!'.tr));
                           } else {
-
                             appProviderInstance.updateUser();
-                            if (appProviderInstance.currentcollection !=
-                                null) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Summry(),
-                                  ));
+                            if (appProviderInstance.currentcollection != null) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Summry(),));
                             } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Packages(),
-                                  ));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Packages(),));
                             }
                           }
                         },
@@ -416,21 +323,5 @@ class _createnewaccountState extends State<createnewaccount> {
                 ),
               ),
         ));
-  }
-
-  Future<Geolocator> getcurrentlocation() async {
-
-    Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((
-        value) async {
-      lat = value.latitude;
-      lang = value.longitude;
-      final coordinates = new Coordinates(lat, lang);
-      final addresses = await Geocoder.local.findAddressesFromCoordinates(
-          coordinates);
-      setState(() {
-        appProviderInstance.setUserAddressName(addresses.first.addressLine);
-      //  detected = true;
-      });
-    });
   }
 }

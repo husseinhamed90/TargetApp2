@@ -9,6 +9,7 @@ import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
 import 'package:target/Modules/RemainingDays/remainingdays.dart';
 import 'package:target/providers/AppProvider.dart';
 import 'package:target/shared/ChangeLang.dart';
+import 'package:target/shared/components.dart';
 
 class Summry extends StatefulWidget {
   @override
@@ -22,6 +23,10 @@ class _SummryState extends State<Summry> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color:Color(0xff36a9e0),size: 25,),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(
           'Package & Account Information'.tr,
           style: TextStyle(
@@ -33,7 +38,6 @@ class _SummryState extends State<Summry> {
         actions: [
           Container(margin: EdgeInsets.all(10.0), child: ChangeLang())
         ],
-        iconTheme: IconThemeData(color: Color(0xff36a9e0), size: 20.0),
       ),
       body: SafeArea(
         child: Container(
@@ -43,10 +47,10 @@ class _SummryState extends State<Summry> {
                 fit: BoxFit.fill,
               )
           ),
-          margin: EdgeInsets.all(10.0),
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
+              SizedBox(height: 10,),
               Card(
                 elevation: 5.0,
                 margin: EdgeInsets.all(15.0),
@@ -62,24 +66,7 @@ class _SummryState extends State<Summry> {
                     padding: EdgeInsets.all(5.0),
                     child:  Column(
                       children: [
-                        Container(
-                          height: (MediaQuery.of(context).size.height*0.2)*0.1,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Account Data'.tr,
-                                  style: TextStyle(
-                                      color: Color(0xff36a9e0),
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ),
-                              Icon( Icons.local_offer, color: Color(0xff36a9e0), size: 25.0),
-                            ],
-                          ),
-                        ),
+                        buildHeader(context,'Account Data'),
                         SizedBox(height: 10,),
                         Expanded(
                           child: LayoutBuilder(builder: (context, constraints) => Column(
@@ -97,6 +84,7 @@ class _SummryState extends State<Summry> {
                   ),
                 ),
               ),
+              SizedBox(height: 10,),
               Card(
                 elevation: 5.0,
                 margin: EdgeInsets.all(15.0),
@@ -112,30 +100,13 @@ class _SummryState extends State<Summry> {
                     padding: EdgeInsets.all(5.0),
                     child:  Column(
                       children: [
-                        Container(
-                          height: (MediaQuery.of(context).size.height*0.3)*0.1,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Collection Details'.tr,
-                                  style: TextStyle(
-                                      color: Color(0xff36a9e0),
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ),
-                              Icon( Icons.local_offer, color: Color(0xff36a9e0), size: 25.0),
-                            ],
-                          ),
-                        ),
+                        buildHeader(context,'Collection Details'),
                         SizedBox(height: 10,),
                         Expanded(
                           child: LayoutBuilder(builder: (context, constraints) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              getRow(constraints, "Target Name: ", "${appProvider_Instance.choosedprogram}",appProvider_Instance),
+                              getRow(constraints, "Target Name: ", "${appProvider_Instance.cuurentprogram.name}",appProvider_Instance),
                               getRow(constraints, "Collection Name : ", "${appProvider_Instance.currentcollection.title}",appProvider_Instance),
                               getRow(constraints, "Days: ", "${appProvider_Instance.currentcollection.dayss.numodfays}",appProvider_Instance),
                               getRow(constraints, "Fee: ", "${appProvider_Instance.currentcollection.price} KWD",appProvider_Instance),
@@ -144,35 +115,10 @@ class _SummryState extends State<Summry> {
                                 padding: const EdgeInsets.only(left: 20),
                                 child: Row(
                                   children: [
-
-                                    appProvider_Instance.currentcollection.launch?Text("Launch / ".tr,
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ):Container(),
-                                    appProvider_Instance.currentcollection.dinner?Text("Dinner / ".tr,
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ):Container(),
-                                    appProvider_Instance.currentcollection.breakfast?Text("Break Fast / ".tr,
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ):Container(),
-                                    appProvider_Instance.currentcollection.snacks?Text("Snacks / ".tr,
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ):Container(),
+                                    buildTypeOfMealIfExistInCollection(appProvider_Instance,"Launch / ",appProvider_Instance.currentcollection.launch),
+                                    buildTypeOfMealIfExistInCollection(appProvider_Instance,"Dinner / ",appProvider_Instance.currentcollection.dinner),
+                                    buildTypeOfMealIfExistInCollection(appProvider_Instance,"Break Fast / ",appProvider_Instance.currentcollection.breakfast),
+                                    buildTypeOfMealIfExistInCollection(appProvider_Instance,"Snacks / ",appProvider_Instance.currentcollection.snacks),
                                   ],
                                 ),
                               ),
@@ -188,99 +134,40 @@ class _SummryState extends State<Summry> {
           ),
         ),
       ),
-      bottomSheet:  FittedBox(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.only(bottom: 5,top: 5),
-          child: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  appProvider_Instance.startdate=DateTime.now().add(new Duration(days:2));
-                  appProvider_Instance.enddate=DateTime.now().add(new Duration(days:appProvider_Instance.currentcollection.dayss.numodfays+1));
-                  //appProvider_Instance.resetmeals();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => selectmeals(appProvider_Instance.currentcollection),
-                      ));
-                },
-                child: Container(
+      bottomSheet:  Container(
+        height: 100,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(bottom: 5,top: 5),
+        child: Column(
+          children: [
+            buildButtonInSummaryPage(appProvider_Instance, context, selectmeals(appProvider_Instance.currentcollection),"Edit Meals"),
+            SizedBox(height: 10,),
+            buildButtonInSummaryPage(appProvider_Instance, context,remainingdays(),"Proceed To Payment"),
 
-                  height: 40,
-                  width: MediaQuery.of(context).size.width*0.5,
-                  decoration: BoxDecoration(
-                      color: Color(0xff36a9e0),
-                      borderRadius: BorderRadius.all(Radius.circular(20))
-                  ),
-                  child: Center(
-                    child: AutoSizeText(
-                      "Edit Meals".tr,
-                      style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10,),
-              InkWell(
-                onTap: () {
-                  appProvider_Instance.startdate=DateTime.now().add(new Duration(days:2));
-                  appProvider_Instance.enddate=DateTime.now().add(new Duration(days:appProvider_Instance.daysoptions[appProvider_Instance.currentcollection.days_id].numodfays+1));
-                  appProvider_Instance.resetmeals();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => remainingdays(),
-                      ));
-                },
-                child: Container(
-
-                  height: 40,
-                  width: MediaQuery.of(context).size.width*0.5,
-                  decoration: BoxDecoration(
-                      color: Color(0xff36a9e0),
-                      borderRadius: BorderRadius.all(Radius.circular(20))
-                  ),
-                  child: Center(
-                    child: AutoSizeText(
-                      "Proceed To Payment".tr,
-                      style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
 
-  Widget getRow(BoxConstraints constraints,String leftPart,String rightPart,appProvider x){
-    return Expanded(
+  Container buildHeader(BuildContext context,String headerText) {
+    return Container(
+      height: (MediaQuery.of(context).size.height*0.2)*0.1,
       child: Row(
         children: [
-
-          Text(leftPart.tr,
-            style: TextStyle(
-                color: Colors.grey,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold
-            ),),
-          SizedBox(width: 2,),
           Expanded(
-            child: AutoSizeText(rightPart,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Text(
+              headerText.tr,
               style: TextStyle(
-                  color: Colors.grey,
-                  //fontSize: 18.0,
+                  color: Color(0xff36a9e0),
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold
-              ),),
+              ),
+            ),
           ),
+          Icon( Icons.local_offer, color: Color(0xff36a9e0), size: 25.0),
         ],
       ),
     );
   }
-
 }

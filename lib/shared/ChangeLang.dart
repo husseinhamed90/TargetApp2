@@ -14,12 +14,10 @@ class ChangeLang extends StatefulWidget {
 class _ChangeLangState extends State<ChangeLang> {
 
   String lang = 'EN';
-
-
   @override
   Widget build(BuildContext context) {
-    final x =Provider.of<appProvider>(context);
-    lang= (x.language=='ar')?"ar":"en";
+    final appProviderInstance =Provider.of<appProvider>(context);
+    lang= (appProviderInstance.language=='ar')?"ar":"en";
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Color(0xff36a9e0),
@@ -65,8 +63,8 @@ class _ChangeLangState extends State<ChangeLang> {
               else{
                 Get.updateLocale(Locale('ar'));
               }
-              x.language=value;
-              x.setlanguagetopref(x.language);
+              appProviderInstance.language=value;
+              appProviderInstance.setlanguagetopref(appProviderInstance.language);
               lang = value;
             });
           }

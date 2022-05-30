@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:target/Modules/Packages/Packages.dart';
 import 'package:target/providers/AppProvider.dart';
 import 'package:target/shared/ChangeLang.dart';
+import 'package:target/shared/components.dart';
 
 
 import '../login/loginpage.dart';
@@ -15,115 +16,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isSwitched = false;
-  String lat="";
-  String lang="";
+  appProvider appProviderInstance;
+  @override
+  void initState() {
+     appProviderInstance =Provider.of<appProvider>(context,listen: false);
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    final appProviderInstance =Provider.of<appProvider>(context);
-    isSwitched= (appProviderInstance.language=='Ar')?true:!false;
 
     return Scaffold(
 
-      body:  Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/bg.jpg'),
-             fit: BoxFit.fill,
-              colorFilter: ColorFilter.mode(Colors.black26, BlendMode.color),
-            )
-        ),
-        margin: EdgeInsets.all(3.0),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            Align(
-                alignment: Alignment.topRight,
-                child: ChangeLang()
-            ),
-            Container(
-              margin: EdgeInsets.all(10.0),
-              height: 200.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.transparent,
-                image: DecorationImage(
-                    image: AssetImage('assets/logo.jpg'),
-                    // fit: BoxFit.fill
+      body:  SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/bg.jpg'),
+               fit: BoxFit.fill,
+                colorFilter: ColorFilter.mode(Colors.black26, BlendMode.color),
+              )
+          ),
+          padding: EdgeInsets.all(5),
+          child: Column(
+            //scrollDirection: Axis.vertical,
+            children: [
+              SizedBox(height: 15.0),
+              Align(
+                  alignment: Alignment.topRight,
+                  child: ChangeLang()
+              ),
+              SizedBox(height: 15.0),
+              Container(
+                height: 200.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.transparent,
+                  image: DecorationImage(
+                      image: AssetImage('assets/logo.jpg'),
+                  ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                InkWell(
-                  onTap: () {
-                    appProviderInstance.getmeals();
-                    appProviderInstance.resetUser();
-                    print(appProviderInstance.user);
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {return Packages();}));
-                  },
-                  child: Container(
-
-                    height: 40,
-                    width: 140,
-                    decoration: BoxDecoration(
-                        color: Color(0xff36a9e0),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                    ),
-                    child: Center(
-                      child: AutoSizeText(
-                        "New Subscription".tr,
-                        style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 15.0),
-            Column(
-              children: [
-                InkWell(
-                  onTap: () {
-                    appProviderInstance.getmeals();
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {return loginpage();}));
-                  },
-                  child: Container(
-
-                    height: 40,
-                    width: 140,
-                    decoration: BoxDecoration(
-                        color: Color(0xff36a9e0),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                    ),
-                    child: Center(
-                      child: AutoSizeText(
-                        "Sign in".tr,
-                        style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+              SizedBox(height: 15.0),
+              DrawButtonOnHomePage(text:"New Subscription",onTapFun: (){
+                appProviderInstance.getmeals();
+                appProviderInstance.resetUser();
+                Navigator.push(context, MaterialPageRoute(builder: (_) {return Packages();}));
+              }),
+              SizedBox(height: 15.0),
+              DrawButtonOnHomePage(text: "Sign in",onTapFun: (){
+                appProviderInstance.getmeals();
+                Navigator.push(context, MaterialPageRoute(builder: (_) {return loginpage();}));
+              }),
+            ],
+          ),
         ),
       ),
     );
   }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //getcurrentlocation();
-  }
-  void getcurrentlocation() async{
-    final geoposition =await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      lat="${geoposition.latitude}";
-      lang="${geoposition.longitude}";
-      print(lat);
-      print(lang);
-    });
-  }
+
 }
