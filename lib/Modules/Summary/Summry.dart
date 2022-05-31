@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:target/Modules/CalenderWithMeals/selectmeals.dart';
 import 'package:target/Modules/RemainingDays/remainingdays.dart';
 import 'package:target/providers/AppProvider.dart';
-import 'package:target/shared/ChangeLang.dart';
+import '../../Widgets/ChangeLang.dart';
 import 'package:target/shared/components.dart';
 
 class Summry extends StatefulWidget {
@@ -144,27 +144,6 @@ class _SummryState extends State<Summry> {
 
           ],
         ),
-      ),
-    );
-  }
-
-  Container buildHeader(BuildContext context,String headerText) {
-    return Container(
-      height: (MediaQuery.of(context).size.height*0.2)*0.1,
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              headerText.tr,
-              style: TextStyle(
-                  color: Color(0xff36a9e0),
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-          Icon( Icons.local_offer, color: Color(0xff36a9e0), size: 25.0),
-        ],
       ),
     );
   }

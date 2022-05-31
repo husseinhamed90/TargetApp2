@@ -135,24 +135,9 @@ class _DetailsState extends State<programdetails> {
                             ),
                             InkWell(
                               onTap: () {
-                                if(promoController.text!=""){
-
-                                  if(appProviderInstance.isCouponValid(promoController.text)){
-                                    setState(() {
-                                      iscouponapplied=true;
-                                      newprice=widget.currentcollection.price*((100-50)/100);
-                                    });
-                                  }
-                                  else{
-                                    ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-                                      content: Text("Invalid coupon"),
-                                      backgroundColor: Colors.red,
-                                    ));
-                                  }
-                                }
+                                validatePromoCode(appProviderInstance, context);
                               },
                               child: Container(
-
                                 height: 40,
                                 width: (MediaQuery.of(context).size.width-40)*0.2,
                                 decoration: BoxDecoration(
@@ -221,6 +206,24 @@ class _DetailsState extends State<programdetails> {
         ),
       ),
     );
+  }
+
+  void validatePromoCode(appProvider appProviderInstance, BuildContext context) {
+    if(promoController.text!=""){
+
+      if(appProviderInstance.isCouponValid(promoController.text)){
+        setState(() {
+          iscouponapplied=true;
+          newprice=widget.currentcollection.price*((100-50)/100);
+        });
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          content: Text("Invalid coupon"),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
   }
 
 }

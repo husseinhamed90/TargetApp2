@@ -75,7 +75,7 @@ class _loginpageState extends State<loginpage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          appProviderInstance.getmeals();
+                          appProviderInstance.getMeals();
                           if(_formKey.currentState.validate()){
                             if(appProviderInstance.validateusernameandpassword(numberController.text,passwordController.text)){
                               if(appProviderInstance.currentcollection!=null && appProviderInstance.startdate!=null && appProviderInstance.enddate!=null){

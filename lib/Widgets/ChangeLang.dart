@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:target/providers/AppProvider.dart';
 
-
-
-
 class ChangeLang extends StatefulWidget {
   @override
   _ChangeLangState createState() => _ChangeLangState();

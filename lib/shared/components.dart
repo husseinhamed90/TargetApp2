@@ -8,7 +8,7 @@ import 'package:target/Modules/ProgramDetails/programdetails.dart';
 import 'package:target/providers/AppProvider.dart';
 
 
-TextStyle textStyle =TextStyle(
+TextStyle textStyle = TextStyle(
     color: Colors.grey,
     fontSize: 15.0,
     fontWeight: FontWeight.bold
@@ -102,6 +102,7 @@ Widget buildField(String label, IconData icon, TextInputType type, TextEditingCo
           validator: (value) {
             return appProviderInstance.validateForm(label, value);
           },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0),
@@ -229,45 +230,6 @@ Widget buildImageFromUrl(String url){
   );
 }
 
-Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal> chosenMeals,BuildContext context,TextEditingController noteController){
-  return  Container(
-    height: 50,
-    child: ListTile(
-      title: AutoSizeText(
-        currentMeal.name,
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.bold
-        ),
-      ),
-      subtitle: AutoSizeText(
-        currentMeal.description,
-        style: TextStyle(
-            color: Colors.grey,
-            fontSize: 15,
-            fontWeight: FontWeight.bold
-        ),
-      ),
-      trailing:(appProviderInstance.ismealexist(currentMeal,chosenMeals))?(currentMeal.isNoteExist==false) ?
-      TextButton(
-        child: Text("Add Note".tr),
-        onPressed: () {
-          customShowBottomSheet(context, appProviderInstance, currentMeal, noteController);
-        },
-      ):
-      TextButton(
-        child: Text("Remove Note".tr),
-        onPressed: () {
-          currentMeal.isNoteExist=false;
-          appProviderInstance.resetIsisConfirmButtonClickedValue();
-        },
-      )
-          :SizedBox(),
-    ),
-  );
-}
-
 customShowBottomSheet(BuildContext context,appProvider appProviderInstance,meal currentMeal,TextEditingController noteController){
   return showModalBottomSheet(
       context: context,
@@ -350,6 +312,7 @@ Widget loginField(String label, IconData icon, bool secured, TextInputType type,
              return null;
            }
          },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
          decoration: InputDecoration(
              border: OutlineInputBorder(
                  borderRadius: BorderRadius.circular(15.0),
@@ -574,6 +537,45 @@ Widget getTextOfData(bool isMealExistInProgram,String text){
   ):Container();
 }
 
+Widget buildMealInfo(meal currentMeal,appProvider appProviderInstance,List<meal> chosenMeals,BuildContext context,TextEditingController noteController){
+  return  Container(
+    height: 50,
+    child: ListTile(
+      title: AutoSizeText(
+        currentMeal.name,
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: 25,
+            fontWeight: FontWeight.bold
+        ),
+      ),
+      subtitle: AutoSizeText(
+        currentMeal.description,
+        style: TextStyle(
+            color: Colors.grey,
+            fontSize: 15,
+            fontWeight: FontWeight.bold
+        ),
+      ),
+      trailing:(appProviderInstance.ismealexist(currentMeal,chosenMeals))?(currentMeal.isNoteExist==false) ?
+      TextButton(
+        child: Text("Add Note".tr),
+        onPressed: () {
+          customShowBottomSheet(context, appProviderInstance, currentMeal, noteController);
+        },
+      ):
+      TextButton(
+        child: Text("Remove Note".tr),
+        onPressed: () {
+          currentMeal.isNoteExist=false;
+          appProviderInstance.resetIsisConfirmButtonClickedValue();
+        },
+      )
+          :SizedBox(),
+    ),
+  );
+}
+
 Widget buildProgramItem(BuildContext context, int index, Orientation orientation,appProvider appProviderInstance) {
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -727,6 +729,27 @@ Widget buildButtonInSummaryPage(appProvider appProvider_Instance, BuildContext c
           style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
       ),
+    ),
+  );
+}
+
+Container buildHeader(BuildContext context,String headerText) {
+  return Container(
+    height: (MediaQuery.of(context).size.height*0.2)*0.1,
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            headerText.tr,
+            style: TextStyle(
+                color: Color(0xff36a9e0),
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+        Icon( Icons.local_offer, color: Color(0xff36a9e0), size: 25.0),
+      ],
     ),
   );
 }

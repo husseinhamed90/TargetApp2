@@ -17,7 +17,6 @@ import 'package:target/Models/User.dart';
 
 class appProvider extends ChangeNotifier{
 
-
   String choosedprogram="";
   String Chossenpackage="";
   program cuurentprogram;
@@ -27,25 +26,21 @@ class appProvider extends ChangeNotifier{
   DateTime startdate;
   DateTime enddate ;
   Collection currentcollection;
-  Collection getcurrentcollection(){
-    return currentcollection;
-  }
-
-  void updateSubscription(Subscription s){
-
-    setstartdate(s.start_programe_date.toString());
-    subscription=s;
-    notifyListeners();
-
-  }
+  List<meal>breakfastmeals=[];
+  List<meal>snacks=[];
+  List<meal>dinnermeals=[];
+  List<meal>launchmeals=[];
+  List<program>programss=[];
+  List<meal>choosenbreakfastmeals=[];
+  List<meal>choosendinnermeals=[];
+  List<meal>chossenlaunchmeals=[];
+  List<meal>chossensnacks=[];
+  List<meal>allchoosenbreakfastmeals=[];
+  List<meal>allchoosendinnermeals=[];
+  List<meal>allchossenlaunchmeals=[];
+  List<meal>allchossensnacks=[];
+  List<String>Choosenprograms=[];
   Map<int,String> dayData = {1 : "Mon",2 : "Tue", 3 : "Wed", 4 : "Thur", 5 : "Fri", 6 : "Sat", 7 : "Sun" };
-
-  void updateCollection(Collection collection){
-    currentcollection=collection;
-    startdate=DateTime.now().add(new Duration(days:2));
-    enddate=DateTime.now().add(new Duration(days:daysoptions[currentcollection.days_id].numodfays+1));
-    notifyListeners();
-  }
   List<Collection>collections=[];
   List<Collection>collections2=[];
   List<Collection>collections3=[];
@@ -55,7 +50,6 @@ class appProvider extends ChangeNotifier{
   bool dinnercheckedValue=false;
   bool snackscheckedValue=false;
   bool launchcheckedValue=false;
-
   TextEditingController name = TextEditingController();
   TextEditingController mobile = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -70,37 +64,50 @@ class appProvider extends ChangeNotifier{
   TextEditingController building = TextEditingController();
   TextEditingController Floor = TextEditingController();
   TextEditingController Appointmnet = TextEditingController();
-
   DateTime birthDate = DateTime(1960);
   var gender;
   String selectedCity = 'Select City'.tr;
-
   String selectedArea = 'Select Area'.tr;
-
-
   ValueNotifier<Map<DateTime, Map<String,List<meal>>>> mealsmap = ValueNotifier({});
-  //List<dynamic> selectedEvents=[];
   List<city>cities=[];
   User user;
   ValueNotifier<String> userAddressName=ValueNotifier("");
   ValueNotifier<bool> pressed=ValueNotifier(true);
   ValueNotifier<Map<DateTime, List<List<meal>>>>currentEvents =ValueNotifier({});
-
   ValueNotifier<List<dynamic> >selectedEvents =ValueNotifier([]);
-
-
   ValueNotifier<bool> OnConfirmpressed=ValueNotifier(true);
   ValueNotifier<bool> isPassVisibleLoginPage=ValueNotifier(true);
   ValueNotifier<bool> isConfirmButtonClicked=ValueNotifier(false);
-
   bool isHoliday=false;
+  DateTime dateTime=null;
+  int daysaftersubscription;
+
+
+  Collection getcurrentcollection(){
+    return currentcollection;
+  }
+
+  void updateSubscription(Subscription s){
+
+    setstartdate(s.start_programe_date.toString());
+    subscription=s;
+    notifyListeners();
+
+  }
+
+  void updateCollection(Collection collection){
+    currentcollection=collection;
+    startdate=DateTime.now().add(new Duration(days:2));
+    enddate=DateTime.now().add(new Duration(days:daysoptions[currentcollection.days_id].numodfays+1));
+    notifyListeners();
+  }
+
   void changeStateOfEyeIcon(ValueNotifier<bool> value){
 
     value.value=!value.value;
     notifyListeners();
   }
 
-  DateTime dateTime=null;
   void changeStateOfDateTimeValue(DateTime newValue){
     dateTime=newValue;
     notifyListeners();
@@ -110,6 +117,7 @@ class appProvider extends ChangeNotifier{
     isHoliday=newValue;
     notifyListeners();
   }
+
   void updateMealsMap(Map<DateTime, Map<String,List<meal>>> newCurrentEvents){
     mealsmap.value=newCurrentEvents;
     notifyListeners();
@@ -129,6 +137,7 @@ class appProvider extends ChangeNotifier{
     isConfirmButtonClicked.value=false;
     notifyListeners();
   }
+
   void updateCurrentProgram(program newValue){
     cuurentprogram=newValue;
     notifyListeners();
@@ -157,6 +166,7 @@ class appProvider extends ChangeNotifier{
          street.text);
     notifyListeners();
   }
+
   String validateForm(String label,String value){
     if (label == "Full Name".tr || label == "Mobile Number".tr ) {
       if (value.isEmpty) {
@@ -201,27 +211,15 @@ class appProvider extends ChangeNotifier{
       return null;
     }
   }
+
   void setUserAddressName(String address){
     userAddressName.value=address;
     notifyListeners();
   }
+
   void updateUserStreet(){
     user.Street=userAddressName.value;
   }
-  List<meal>breakfastmeals=[];
-  List<meal>snacks=[];
-  List<meal>dinnermeals=[];
-  List<meal>launchmeals=[];
-  List<program>programss=[];
-  List<meal>choosenbreakfastmeals=[];
-  List<meal>choosendinnermeals=[];
-  List<meal>chossenlaunchmeals=[];
-  List<meal>chossensnacks=[];
-  List<meal>allchoosenbreakfastmeals=[];
-  List<meal>allchoosendinnermeals=[];
-  List<meal>allchossenlaunchmeals=[];
-  List<meal>allchossensnacks=[];
-  List<String>Choosenprograms=[];
 
   void resetUser(){
     user=null;
@@ -247,6 +245,7 @@ class appProvider extends ChangeNotifier{
       setUserAddressName("");
       notifyListeners();
   }
+
   String getDays(appProvider approvider){
     String days ="";
     print(currentcollection.dayss.dayoff);
@@ -257,7 +256,7 @@ class appProvider extends ChangeNotifier{
 
   }
 
-  void getmeals(){
+  void getMeals(){
     //get meals and collections from the api
     daysoptions=[
       days(1,14,[5]),
@@ -323,7 +322,6 @@ class appProvider extends ChangeNotifier{
      return true;
   }
 
-  int daysaftersubscription;
   void updateremain(int x){
     daysaftersubscription=x;
     notifyListeners();
@@ -392,21 +390,6 @@ class appProvider extends ChangeNotifier{
     return false;
   }
 
-  void chnagecurrentprogram(String x){
-    if(x=="BreakFast".tr){
-      meals=breakfastmeals;
-    }
-    if(x=="Dinner".tr){
-      meals=dinnermeals;
-    }
-    if(x=="Launch".tr){
-      meals=launchmeals;
-    }
-    if(x=="Snacks".tr){
-      meals=snacks;
-    }
-  }
-
   void updateAppProvider(widget) {
     List<List<meal>> meals=[];
     widget.mealsmap[widget.calendarController.selectedDay].forEach((key, value) {
@@ -417,7 +400,6 @@ class appProvider extends ChangeNotifier{
     updateSelectedEvents(widget.selectedEvents);
     updateMealsMap(widget.mealsmap);
   }
-
 
   void addMealToOrder(appProvider appProviderInstance, meal currentMeal, String addedlist, widget, List<meal> mealss, Function setStateFunction, List<meal> choosedmeals) {
     appProviderInstance.addtolist(currentMeal,addedlist,widget.calendarController.selectedDay);
@@ -430,7 +412,6 @@ class appProvider extends ChangeNotifier{
       widget.mealsmap[widget.calendarController.selectedDay]={addedlist:choosedmeals};
     }
   }
-
 
   void removeOldMeals(String whichMeal, appProvider appProviderInstance,dynamic widget,Function function) {
     List<meal> meals;
@@ -492,15 +473,6 @@ class appProvider extends ChangeNotifier{
     }
   }
 
-  // String getDays(appProvider appProviderInstance,Collection currentCollection){
-  //   String days ="";
-  //   currentCollection.dayss.dayoff.forEach((element) {
-  //     days+=appProviderInstance.dayData[element].tr+" / ";
-  //   });
-  //   return days;
-  //
-  // }
-
   void removeprogram (String programename){
     for(int i=0;i<Choosenprograms.length;i++){
       if(Choosenprograms[i]==programename){
@@ -512,13 +484,9 @@ class appProvider extends ChangeNotifier{
   }
 
   void resetmeals(){
-   // dateTime=null;
     chossenlaunchmeals=[];
     choosendinnermeals=[];
     choosenbreakfastmeals=[];
-    //mealsmap.value={};
-    //currentEvents.value={};
-    //selectedEvents.value=[];
     Chossenpackage="";
     chossensnacks=[];
     notifyListeners();
@@ -548,6 +516,7 @@ class appProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
+
   void getlanguagefrompref()async{
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;

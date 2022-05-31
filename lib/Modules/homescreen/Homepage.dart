@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:target/Modules/Packages/Packages.dart';
 import 'package:target/providers/AppProvider.dart';
-import 'package:target/shared/ChangeLang.dart';
+import '../../Widgets/ChangeLang.dart';
 import 'package:target/shared/components.dart';
 
 
@@ -56,13 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 15.0),
               DrawButtonOnHomePage(text:"New Subscription",onTapFun: (){
-                appProviderInstance.getmeals();
+                appProviderInstance.getMeals();
                 appProviderInstance.resetUser();
                 Navigator.push(context, MaterialPageRoute(builder: (_) {return Packages();}));
               }),
               SizedBox(height: 15.0),
               DrawButtonOnHomePage(text: "Sign in",onTapFun: (){
-                appProviderInstance.getmeals();
+                appProviderInstance.getMeals();
                 Navigator.push(context, MaterialPageRoute(builder: (_) {return loginpage();}));
               }),
             ],
